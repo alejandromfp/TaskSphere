@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
+        android:backgroundTint="@color/azulOscuro"
         android:onClick="abrirCalendario"
         android:text="Seleccionar Fecha"
         app:layout_constraintEnd_toEndOf="parent"
@@ -122,10 +123,11 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="556dp"
+        android:layout_marginTop="524dp"
+        android:backgroundTint="@color/azulOscuro"
         android:text="Solicitar Vacaciones"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,5 +142,65 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:background="@color/azulOscuro"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- LinearLayout para contener los botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="-88dp">
+
+            <!-- Botón 1 -->
+
+            <!-- Botón 2 -->
+            <Button
+                android:id="@+id/botonInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/azulOscuro"
+                app:icon="@drawable/inicio"
+                app:iconSize="30dp" />
+
+            <Button
+                android:id="@+id/botonAnuncios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/azulOscuro"
+                app:icon="@drawable/anuncios"
+                app:iconSize="40dp" />
+
+            <!-- Botón 3 -->
+            <Button
+                android:id="@+id/botonTareas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/azulOscuro"
+                app:icon="@drawable/tareas"
+                app:iconSize="30dp" />
+
+            <!-- Botón 4 -->
+            <Button
+                android:id="@+id/botonCalendario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/azulOscuro"
+                app:icon="@drawable/calendario"
+                app:iconSize="30dp" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
