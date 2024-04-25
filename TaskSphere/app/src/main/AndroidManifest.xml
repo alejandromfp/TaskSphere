@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskSphere"
         tools:targetApi="31">
+        
+        <activity
+            android:name=".News"
+            android:exported="false" />
         <activity
             android:name=".CalendarActivity"
             android:exported="true" />
@@ -28,9 +35,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:name=".Registry"
+            android:exported="true" />
     </application>
 
 </manifest>

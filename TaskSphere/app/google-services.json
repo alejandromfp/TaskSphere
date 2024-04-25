@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253614455792",
+    "project_id": "tasksphere-22df9",
+    "storage_bucket": "tasksphere-22df9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253614455792:android:45e7b52df0391b746cfb35",
+        "android_client_info": {
+          "package_name": "com.example.tasksphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeRVkooMXlMCofdGl7wEBMeZlvGIKfWvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
