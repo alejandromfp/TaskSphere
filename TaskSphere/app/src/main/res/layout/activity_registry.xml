@@ -26,7 +26,7 @@
         android:id="@+id/layoutNombre"
         android:layout_width="347dp"
         android:layout_height="59dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo">
@@ -90,8 +90,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cajaCiudad"
-            android:layout_width="155dp"
-            android:layout_height="47dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Ciudad" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,8 +109,40 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cajaTelefono"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:hint="Telefono" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutFechaNacimiento"
+        android:layout_width="347dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutCiudad">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaFechaNacimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de Nacimiento" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutDni"
+        android:layout_width="347dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutFechaNacimiento">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="DNI" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -120,7 +152,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutCiudad">
+        app:layout_constraintTop_toBottomOf="@+id/layoutDni">
 
 
         <com.google.android.material.textfield.TextInputEditText
@@ -156,11 +188,12 @@
         android:id="@+id/botonCrearCuenta"
         android:layout_width="202dp"
         android:layout_height="50dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="@color/azulOscuro"
         android:textCursorDrawable="@color/azulClaro"
         app:iconTint="@color/azulOscuro"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutContraseña"
         tools:text="Registrarme" />

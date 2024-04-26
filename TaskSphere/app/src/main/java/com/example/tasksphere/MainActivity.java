@@ -25,7 +25,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText;
+    EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
     TextView botonRegistro;
     private FirebaseFirestore db;
 
@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         direccionText = findViewById(R.id.cajaDireccion);
         ciudadText = findViewById(R.id.cajaCiudad);
         telefonoText = findViewById(R.id.cajaTelefono);
+        fechaNacimientoText = findViewById(R.id.cajaFechaNacimiento);
+        dniText = findViewById(R.id.cajaDni);
 
 
         botonRegistro = findViewById(R.id.botonCrearCuenta);
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             String direccion = direccionText.getText().toString();
             String ciudad = ciudadText.getText().toString();
             String telefono = telefonoText.getText().toString();
+            String fechaNacimiento = fechaNacimientoText.getText().toString();
+            String dni = dniText.getText().toString();
 
             // Validación de campos vacíos y formatos correctos
             if (nombre.isEmpty()) {
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 ciudadText.setError("Campo obligatorio");
             } else if (telefono.isEmpty()) {
                 telefonoText.setError("Campo obligatorio");
-            } else if (!telefono.matches("\\d{9}")) { // Asegura que el teléfono tenga exactamente 9 dígitos numéricos
+            } else if (!telefono.matches("\\d{9}")) {
                 telefonoText.setError("El teléfono debe tener 9 dígitos");
             } else if (email.isEmpty()) {
                 emailText.setError("Campo obligatorio");
@@ -80,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
                 passText.setError("Campo obligatorio");
             } else if (password.length() < 6) {
                 passText.setError("La contraseña debe tener al menos 6 caracteres");
-            } else if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$")) { // Asegura que la contraseña sea segura
+            } else if (!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$")) {
                 passText.setError("La contraseña debe incluir números, letras mayúsculas y minúsculas, y caracteres especiales");
+            } else if (fechaNacimiento.isEmpty() || !fechaNacimiento.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                fechaNacimientoText.setError("La fecha de nacimiento debe estar en formato DD/MM/AAAA");
+            } else if (dni.isEmpty() || !dni.matches("\\d{8}[A-Z]")) {
+                dniText.setError("El DNI debe tener 8 dígitos y una letra al final");
             } else {
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, task -> {
@@ -95,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                                     userData.put("direccion", direccion);
                                     userData.put("ciudad", ciudad);
                                     userData.put("telefono", telefono);
+                                    userData.put("fechaNacimiento", fechaNacimiento);
+                                    userData.put("dni", dni);
 
                                     // Guardar estos datos en Firestore
                                     db.collection("users").document(user.getUid()).set(userData)
