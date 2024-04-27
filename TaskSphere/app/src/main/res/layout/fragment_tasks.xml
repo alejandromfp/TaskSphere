@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,30 +7,20 @@
     android:layout_height="match_parent"
     android:layout_alignWithParentIfMissing="false">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/add"
-
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_task_button"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:cardCornerRadius="30dp"
-
-        app:cardElevation="15dp"
+        android:elevation="5dp"
+        android:src="@drawable/add_circle"
+        app:backgroundTint="@color/azulOscuro"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="TODO"
-            android:src="@drawable/add_circle"
-
-            android:cropToPadding="true"
-            android:elevation="5dp" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/username"
@@ -51,14 +42,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_regular"
         android:text="Unir FP Prácticas."
         android:textColor="@color/white"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/white_container"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/username"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -66,17 +58,18 @@
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:layout_marginStart="16dp"
-
         android:elevation="500dp"
-        android:padding="10dp"
 
+        android:padding="10dp"
         app:cardCornerRadius="15dp"
         app:cardElevation="80dp"
         app:layout_constraintBottom_toTopOf="@+id/white_container"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.50">
 
         <ImageView
             android:id="@+id/imageView"
@@ -92,7 +85,7 @@
         android:id="@+id/blue_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#2B709E"
+        android:background="@color/azulOscuro"
         android:elevation="-1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +99,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_main"
-        android:elevation="10dp"
+        android:elevation="1dp"
         android:outlineSpotShadowColor="@color/black"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -164,7 +157,6 @@
                             android:id="@+id/pendientesButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_weight="1"
                             android:elevation="20dp"
                             android:backgroundTint="@color/azulMasClaro"
@@ -177,7 +169,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:backgroundTint="#CEE6F6"
+                            android:backgroundTint="@color/azulMasClaro"
                             android:onClick="selectButton"
                             android:text="Sin asignar"
                             android:textColor="@color/azulOscuro" />
@@ -187,7 +179,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:backgroundTint="#CEE6F6"
+                            android:backgroundTint="@color/azulMasClaro"
                             android:onClick="selectButton"
                             android:text="Finalizadas"
                             android:textColor="@color/azulOscuro" />
@@ -242,7 +234,6 @@
                         <include layout="@layout/item_tasks" />
 
                         <include layout="@layout/item_tasks" />
-
                     </LinearLayout>
 
 

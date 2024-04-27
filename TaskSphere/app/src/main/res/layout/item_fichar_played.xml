@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="5dp"
+    android:background="@drawable/item_task_style"
+    android:backgroundTint="@color/azulMasOscuro"
+    android:padding="16dp"
+    android:layout_margin="16dp">
+
+    <Button
+        android:id="@+id/pausebutton"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:paddingLeft="12dp"
+        android:background="@drawable/button_ripple"
+        android:drawableLeft="@drawable/pause_icon"
+        app:backgroundTint="#F3AE01"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="00:00:00:00"
+        android:textColor="#5DE2D7"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/pausebutton"
+        app:layout_constraintStart_toEndOf="@+id/botonstop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/username_fichar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Alfonso"
+        android:textColor="@color/azulMasClaro"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/pausebutton"
+        app:layout_constraintStart_toEndOf="@+id/botonstop"
+        app:layout_constraintTop_toBottomOf="@+id/timer" />
+
+    <Button
+        android:id="@+id/botonstop"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_ripple"
+        android:drawableLeft="@drawable/stop_icon"
+        android:paddingLeft="13dp"
+        app:backgroundTint="@color/rojoCoral"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
