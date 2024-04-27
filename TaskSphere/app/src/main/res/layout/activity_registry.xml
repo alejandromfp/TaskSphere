@@ -23,15 +23,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaNombre"
+        android:id="@+id/layoutNombre"
         android:layout_width="347dp"
         android:layout_height="59dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nombre"
@@ -40,15 +41,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaApellidos"
+        android:id="@+id/layoutApellidos"
         android:layout_width="347dp"
         android:layout_height="59dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaNombre">
+        app:layout_constraintTop_toBottomOf="@+id/layoutNombre">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaApellidos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Apellidos"
@@ -58,15 +60,16 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaDireccion"
+        android:id="@+id/layoutDireccion"
         android:layout_width="347dp"
         android:layout_height="59dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaApellidos">
+        app:layout_constraintTop_toBottomOf="@+id/layoutApellidos">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaDireccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Direccion"
@@ -76,49 +79,84 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaCiudad"
+        android:id="@+id/layoutCiudad"
         android:layout_width="156dp"
         android:layout_height="59dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaDireccion">
+        app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="155dp"
-            android:layout_height="47dp"
+            android:id="@+id/cajaCiudad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Ciudad" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaTelefono"
+        android:id="@+id/layoutTelefono"
         android:layout_width="178dp"
         android:layout_height="59dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.224"
-        app:layout_constraintStart_toEndOf="@+id/CajaCiudad"
-        app:layout_constraintTop_toBottomOf="@+id/CajaDireccion">
+        app:layout_constraintStart_toEndOf="@+id/layoutCiudad"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaTelefono"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:hint="Telefono" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaEmail"
+        android:id="@+id/layoutFechaNacimiento"
         android:layout_width="347dp"
         android:layout_height="59dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaCiudad">
+        app:layout_constraintTop_toBottomOf="@+id/layoutCiudad">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaFechaNacimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de Nacimiento" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutDni"
+        android:layout_width="347dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutFechaNacimiento">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="DNI" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutEmail"
+        android:layout_width="347dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutDni">
 
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
@@ -128,16 +166,17 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/CajaContraseña"
+        android:id="@+id/layoutContraseña"
         android:layout_width="347dp"
         android:layout_height="59dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaEmail">
+        app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
 
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cajaPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Contraseña"
@@ -146,16 +185,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/botonCrearCuenta"
         android:layout_width="202dp"
         android:layout_height="50dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="@color/azulOscuro"
         android:textCursorDrawable="@color/azulClaro"
         app:iconTint="@color/azulOscuro"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CajaContraseña"
+        app:layout_constraintTop_toBottomOf="@+id/layoutContraseña"
         tools:text="Registrarme" />
 
 
