@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home_page"
-        android:icon="@drawable/home"
+        android:icon="@drawable/inicio"
         android:title="Home"/>
     <item
         android:id="@+id/comunicados_page"
-        android:icon="@drawable/comunicados"
+        android:icon="@drawable/anuncios"
         android:title="Comunicados"/>
     <item
-        android:id="@+id/apps_page"
-        android:icon="@drawable/apps"
-        app:itemBackground="@color/azulClaro"
-        android:title="Apps"/>
+        android:id="@+id/calendar_page"
+        android:icon="@drawable/calendario"
+        android:title="Calendario"/>
     <item
         android:id="@+id/tasks_page"
-        android:icon="@drawable/tasks"
+        android:icon="@drawable/tareas"
         android:title="Tareas"/>
     <item
         android:id="@+id/profile_page"

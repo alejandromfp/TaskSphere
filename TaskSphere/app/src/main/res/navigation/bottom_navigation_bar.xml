@@ -16,9 +16,9 @@
         tools:layout="@layout/fragment_comunicados"/>
 
     <fragment
-        android:id="@+id/apps_page"
-        android:name="com.example.tasksphere.AppsFragment"
-        tools:layout="@layout/fragment_apps"/>
+        android:id="@+id/calendar_page"
+        android:name="com.example.tasksphere.CalendarFragment"
+        tools:layout="@layout/fragment_calendar"/>
 
     <fragment
         android:id="@+id/tasks_page"

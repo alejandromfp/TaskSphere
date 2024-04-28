@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Estado seleccionado -->
     <item
-        android:color="@color/azulOscuro"
+        android:color="@color/azulMasClaro"
         android:state_selected="true"
         />
     <!-- Estado normal -->

@@ -40,7 +40,11 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-storage")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation ("com.github.yalantis:ucrop:2.2.6")
+    implementation ("com.google.code.gson:gson:2.8.8")
 }
 
