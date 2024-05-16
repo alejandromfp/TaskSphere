@@ -8,12 +8,14 @@
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="16dp"
+    android:layout_margin="16dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        >
 
         <TextView
             android:id="@+id/textView7"
@@ -22,7 +24,7 @@
             android:fontFamily="@font/poppins_bold"
             android:text="Nueva tarea"
             android:textColor="@color/azulMasOscuro"
-            android:textSize="24sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.547"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,21 +48,22 @@
 
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="adadadadadaadadadaaadaadaadad"
+            android:hint=""
             app:boxBackgroundColor="@color/white"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@color/rojoCoral"
+            app:boxStrokeColor="@color/black"
             app:hintTextColor="@color/rojoCoral"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_task_text">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/task_name"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
 
                 android:background="@null"
                 android:paddingStart="8dp"
@@ -93,15 +96,15 @@
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
-            app:boxStrokeColor="@color/rojoCoral"
+            app:boxStrokeColor="@color/azulMasOscuro"
             app:hintTextColor="@color/rojoCoral"
-            android:hint="adassd"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/task_description_text">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editText"
+                android:id="@+id/task_description"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:background="@null"
@@ -127,10 +130,10 @@
 
         <Spinner
             android:id="@+id/spinner"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="333dp"
+            android:layout_height="48dp"
             android:layout_marginTop="8dp"
+            android:padding="0dp"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -143,11 +146,11 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/button_ripple"
             android:gravity="center"
-            android:text="Agregar Tarea"
+            android:text="Agregar tarea"
             android:textColor="@color/azulMasClaro"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:backgroundTint="@color/azulMasOscuro"
+            app:backgroundTint="@color/azulOscuro"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner" />

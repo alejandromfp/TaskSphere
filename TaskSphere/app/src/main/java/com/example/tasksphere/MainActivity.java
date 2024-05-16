@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +13,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +34,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+
+    private final String API_KEY = "AAAAOwyZe_A:APA91bH2sWXmIU6uQJGwQ51bsu53CrZ1D7h7znkxf0jKFgYWBqzmwu5a0PoQmKcp9UxmWEjvSFBpVaf11hMp-y6auZvv3DB5Jb2tBkWQ7EgoUWok2bPUjV1A7tFtBnjkPXUq1HFPo8i-";
     EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
     TextView botonRegistro;
     private FirebaseFirestore db;
@@ -99,12 +110,17 @@ public class MainActivity extends AppCompatActivity {
                                     // Crear un mapa para almacenar los datos adicionales del usuario
                                     Map<String, Object> userData = new HashMap<>();
                                     userData.put("nombre", nombre);
+                                    userData.put("email", email);
                                     userData.put("apellidos", apellidos);
                                     userData.put("direccion", direccion);
                                     userData.put("ciudad", ciudad);
                                     userData.put("telefono", telefono);
                                     userData.put("fechaNacimiento", fechaNacimiento);
                                     userData.put("dni", dni);
+                                    userData.put("rol", "Sin asignar");
+
+                                    //ESTO ENVIA UNA NOTIFICACION A LOS ADMINISTRADORES DE QUE UN USUARIO SE REGISTRO
+                                    obtenerTokensAdministradores(nombre);
 
                                     // Guardar estos datos en Firestore
                                     db.collection("users").document(user.getUid()).set(userData)
@@ -121,6 +137,85 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+    }
+
+    private void enviarNotificacion(String token, String title, String body, String administratorId) {
+        JSONObject notification = new JSONObject();
+        JSONObject notificationBody = new JSONObject();
+        try {
+            notificationBody.put("title", title);
+            notificationBody.put("body", body);
+            Log.d("TAG2", token);
+            notification.put("to", token);
+            notification.put("notification", notificationBody);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "https://fcm.googleapis.com/fcm/send",
+                    notification,
+                    response -> {
+                        guardarNotificacionEnFirebase(title, body, administratorId);
+                    },
+                    error -> {
+                        Log.e("TAG", "Error al enviar notificación: " + error.getMessage());
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Authorization", "Bearer " + API_KEY);
+                    return headers;
+                }
+            };
+
+            Volley.newRequestQueue(this).add(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void obtenerTokensAdministradores(String username) {
+        Log.d("TAG", "Error al obtener tokens de administradores: ");
+        db.collection("users")
+                .whereEqualTo("rol", "Administrador")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String token = document.getString("token");
+                            String administratorId = document.getId();
+                            if (token != null && !token.isEmpty()) {
+
+                                enviarNotificacion(token,
+                                        "Nuevo usuario registrado",
+                                        "¡El usuario " + username+" se ha registrado en la aplicación, asignale un Rol cuanto antes!",
+                                        administratorId);
+                            }
+                        }
+                    } else {
+                        Log.e("TAG", "Error al obtener tokens de administradores: ", task.getException());
+                    }
+                });
+    }
+
+    public void guardarNotificacionEnFirebase(String title, String body, String administratorId){
+
+        Map<String, Object> notificacion = new HashMap<>();
+        notificacion.put("titulo", title);
+        notificacion.put("descripcion", body);
+        notificacion.put("fechaCreacion", Timestamp.now());
+        notificacion.put("categoria", "Equipo");
+
+        db.collection("users")
+                .document(administratorId)
+                .collection("notificaciones")
+                .add(notificacion)
+                .addOnSuccessListener(command -> {
+                    Log.d("Firestore", "Se ha guardado con exito");
+                })
+                .addOnFailureListener(command -> {
+                    Log.d("Firestore", "No se ha guardado con exito");
+                });
 
     }
 }

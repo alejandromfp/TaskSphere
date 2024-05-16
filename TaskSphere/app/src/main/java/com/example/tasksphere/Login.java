@@ -29,6 +29,7 @@ public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText emailText, passText;
+    String token;
 
     Button botonLogin;
     TextView botonRegistro;
@@ -152,7 +153,7 @@ public class Login extends AppCompatActivity {
         usuario = new User();
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get()
                 .addOnCompleteListener(task -> {
-                    Log.d("NONONO", "funciona");
+
                     if(task.isSuccessful()){
 
                         DocumentSnapshot doc = task.getResult();
@@ -163,11 +164,14 @@ public class Login extends AppCompatActivity {
                             usuario.setApellidos(doc.getString("apellidos"));
                             usuario.setDireccion(doc.getString("direccion"));
                             usuario.setDni(doc.getString("dni"));
+                            usuario.setLocalidad(doc.getString("ciudad"));
                             usuario.setEmail(mAuth.getCurrentUser().getEmail());
                             usuario.setRol(doc.getString("rol"));
                             usuario.setFechaNac(doc.getString("fechaNacimiento"));
                             usuario.setTelefono(doc.getString("telefono"));
+                            usuario.setBiografia(doc.getString("biografia"));
                             usuario.setProfileImage(doc.getString("profile_img_path"));
+                            usuario.setUserToken(doc.getString("token"));
                             Log.d("SISISIISISISI", usuario.getDni());
                             setDatosUsuario();
                         }else
@@ -194,4 +198,6 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+
 }

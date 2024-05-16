@@ -22,14 +22,29 @@
         android:text="Detalle de Tarea"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/white_container"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <Button
+        android:id="@+id/backbutton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_ripple"
+        android:drawableLeft="@drawable/back_arrow"
+        android:paddingLeft="4dp"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerContainer"
+        app:layout_constraintEnd_toStartOf="@+id/username"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
-        android:id="@+id/white_container"
+        android:id="@+id/recyclerContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_main"
@@ -161,7 +176,7 @@
                 app:layout_constraintTop_toBottomOf="@id/task_asingada_text">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/profileUserImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
@@ -198,7 +213,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/contador"
                     android:layout_width="wrap_content"
                     android:layout_height="27dp"
                     android:layout_marginTop="9dp"
@@ -218,14 +233,30 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="2dp"
-                    android:background="@drawable/button_bg"
                     android:text="Parar"
-
+                    android:background="@drawable/button_ripple"
                     app:backgroundTint="@color/rojoCoral"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                    app:layout_constraintStart_toEndOf="@+id/contador"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.375" />
+
+                <Button
+
+                    android:id="@+id/button_empezar"
+                    android:layout_width="148dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Empezar"
+                    android:background="@drawable/button_ripple"
+                    app:backgroundTint="@color/azulMasOscuro"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/contador"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.375" />
 

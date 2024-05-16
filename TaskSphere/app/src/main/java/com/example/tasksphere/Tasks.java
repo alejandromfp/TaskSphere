@@ -16,6 +16,7 @@ public class Tasks extends AppCompatActivity {
     public int[] buttonStatus  = new int[3];
     List<Button> listaBotones = new ArrayList<>();
 
+
     LinearLayout sinAsignarContainer, pendientesContainer, finalizadasContainer;
 
     @Override

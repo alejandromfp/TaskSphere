@@ -49,5 +49,8 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-firestore:8.0.0")
     implementation ("com.github.yalantis:ucrop:2.2.6")
     implementation ("com.google.code.gson:gson:2.8.8")
+    implementation ("com.google.firebase:firebase-messaging")
+    implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.android.volley:volley:1.2.1")
 }
 

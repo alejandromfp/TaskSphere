@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,20 +53,28 @@ public class ComunicadosFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_comunicados, container, false);
         getItems(rootView);
+        obtenerDatosDeUsuario();
+        setDatosDeUsuario();
         return rootView;
     }
 
     private void getItems(View rootView){
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        profileImg = rootView.findViewById(R.id.profileimg);
+        profileImg = rootView.findViewById(R.id.profileImg);
+        profileImg.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.popBackStack();
+            navController.navigate(R.id.profile_page);
+        });
         username = rootView.findViewById(R.id.username);
     }
 
@@ -86,10 +96,4 @@ public class ComunicadosFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        obtenerDatosDeUsuario();
-        setDatosDeUsuario();
-    }
 }
