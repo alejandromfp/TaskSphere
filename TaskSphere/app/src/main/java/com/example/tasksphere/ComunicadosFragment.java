@@ -56,7 +56,7 @@ public class ComunicadosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_comunicados, container, false);
         getItems(rootView);
         return rootView;
     }
