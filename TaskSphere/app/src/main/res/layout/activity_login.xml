@@ -11,7 +11,10 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="192dp"
+
+        android:layout_marginTop="67dp"
+
+        android:layout_marginBottom="88dp"
         android:text="TaskSphere"
         android:textColor="@color/azulOscuro"
         android:textSize="48sp"
@@ -19,8 +22,7 @@
         app:layout_constraintBottom_toTopOf="@+id/layoutCorreo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/crearCuenta"
@@ -39,7 +41,7 @@
     <Button
         android:id="@+id/botonLogin"
         android:layout_width="208dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:backgroundTint="@color/azulOscuro"
         android:text="@string/login"
