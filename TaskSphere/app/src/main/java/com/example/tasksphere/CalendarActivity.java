@@ -74,7 +74,7 @@ public class  CalendarActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
-            Toast.makeText(this, "No autenticado, no se puede enviar la solicitud", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No autenticado, no se puede enviar la solicitud.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -97,7 +97,7 @@ public class  CalendarActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(CalendarActivity.this, "Error al verificar solicitudes existentes", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CalendarActivity.this, "Error al verificar solicitudes existentes.", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -111,11 +111,11 @@ public class  CalendarActivity extends AppCompatActivity {
         db.collection("solicitudes")
                 .add(userData)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(CalendarActivity.this, "Solicitud enviada con éxito", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CalendarActivity.this, "Solicitud enviada con éxito.", Toast.LENGTH_LONG).show();
                     Log.d("Firestore", "Documento añadido con ID: " + documentReference.getId());
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(CalendarActivity.this, "Error al enviar la solicitud", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CalendarActivity.this, "Error al enviar la solicitud.", Toast.LENGTH_LONG).show();
                     Log.w("Firestore", "Error añadiendo documento", e);
                 });
     }
