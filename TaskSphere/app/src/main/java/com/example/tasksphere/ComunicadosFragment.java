@@ -1,9 +1,13 @@
 package com.example.tasksphere;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -12,14 +16,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tasksphere.modelo.entidad.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +48,11 @@ public class ComunicadosFragment extends Fragment {
     User usuario;
 
     FirebaseAuth mAuth;
+    Dialog dialog;
 
+    FloatingActionButton addNews;
+
+    Button saveNew;
     FirebaseFirestore db;
     ImageView profileImg;
     TextView username;
@@ -76,6 +96,29 @@ public class ComunicadosFragment extends Fragment {
             navController.navigate(R.id.profile_page);
         });
         username = rootView.findViewById(R.id.username);
+
+        //New Task
+
+        addNews = rootView.findViewById(R.id.add_news_button);
+        addNews.setOnClickListener(v -> {
+            dialog = new Dialog(requireContext());
+            dialog.setContentView(R.layout.add_news);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            saveNew = dialog.findViewById(R.id.saveButton);
+            saveNew.setOnClickListener(v1 -> {
+                //AGREGAR TAREA A BASE DE DATOS TODO
+                TextInputEditText titleInput = dialog.findViewById(R.id.titleinput);
+                TextInputEditText descriptionInput = dialog.findViewById(R.id.descripcioninput);
+                guardarComunicado(titleInput.getText().toString(), descriptionInput.getText().toString());
+                dialog.dismiss();
+
+
+
+            });
+            dialog.show();
+        });
     }
 
     private void obtenerDatosDeUsuario(){
@@ -95,5 +138,32 @@ public class ComunicadosFragment extends Fragment {
                 .into(profileImg);
     }
 
+
+    public void guardarComunicado(String titulo, String descripcion) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference comunicadosRef = db.collection("Comunicados");
+
+        // Crear un nuevo comunicado con los datos proporcionados
+        Map<String, Object> comunicado = new HashMap<>();
+        comunicado.put("titulo", titulo);
+        comunicado.put("descripcion", descripcion);
+        comunicado.put("fecha_creacion", FieldValue.serverTimestamp());
+        comunicado.put("id_usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        // Agregar el comunicado a la colecciÃ³n "comunicados"
+        comunicadosRef.add(comunicado)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(requireContext(), "Comunicado guardado correctamente", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(requireContext(), "Error al guardar el comunicado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
 }
