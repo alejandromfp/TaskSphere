@@ -172,7 +172,7 @@ public class Login extends AppCompatActivity {
                             usuario.setBiografia(doc.getString("biografia"));
                             usuario.setProfileImage(doc.getString("profile_img_path"));
                             usuario.setUserToken(doc.getString("token"));
-                            Log.d("SISISIISISISI", usuario.getDni());
+                            //Log.d("SISISIISISISI", usuario.getDni());
                             setDatosUsuario();
                         }else
                             Log.d("NONONO", "no funciona");
