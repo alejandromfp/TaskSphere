@@ -92,7 +92,8 @@
 
                 <include layout="@layout/item_news"/>
                 <include layout="@layout/item_news"/>
-                <include layout="@layout/item_news"/>
+
+                <include layout="@layout/item_news" />
 
 
             </LinearLayout>

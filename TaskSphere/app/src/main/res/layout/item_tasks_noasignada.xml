@@ -20,7 +20,7 @@
 
 
     <TextView
-        android:id="@+id/task_name"
+        android:id="@+id/fichajetitle"
         android:layout_width="306dp"
         android:layout_height="51dp"
         android:layout_marginStart="8dp"

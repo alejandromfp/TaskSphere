@@ -100,7 +100,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/rounded_main"
-        android:elevation="1dp"
+        android:elevation="5dp"
         android:outlineSpotShadowColor="@color/black"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,7 +116,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:text="Lista de Tareas"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -140,7 +140,8 @@
 
                     <SearchView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+
                         android:layout_margin="8dp"
                         android:background="@drawable/search_view_bg"
                         app:queryHint="Search here..." />
@@ -150,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
 
-                        android:background="@drawable/rounded_main">
+                        >
 
 
                         <Button
@@ -160,6 +161,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:elevation="20dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_medium"
                             android:backgroundTint="@color/azulMasClaro"
                             android:onClick="selectButton"
                             android:text="Pendientes"
@@ -170,6 +173,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_medium"
                             android:backgroundTint="@color/azulMasClaro"
                             android:onClick="selectButton"
                             android:text="Sin asignar"
@@ -180,6 +185,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/poppins_medium"
                             android:backgroundTint="@color/azulMasClaro"
                             android:onClick="selectButton"
                             android:text="Finalizadas"
@@ -192,6 +199,7 @@
                         android:id="@+id/tareas_sin_asignar_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
@@ -199,9 +207,10 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_semibold"
                             android:layout_marginBottom="8dp"
-                            android:text="Tareas sin asignar:"
-                            android:textSize="16sp"
+                            android:text="Tareas sin asignar"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -219,7 +228,7 @@
                     <LinearLayout
                         android:id="@+id/tareas_pendientes_container"
                         android:layout_width="match_parent"
-
+                        android:gravity="center"
                         android:layout_height="wrap_content"
 
                         android:orientation="vertical">
@@ -228,10 +237,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="14dp"
                             android:layout_marginBottom="8dp"
-                            android:text="Tareas pendientes:"
-                            android:textSize="16sp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Tareas pendientes"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -249,15 +259,17 @@
                         android:id="@+id/tareas_terminadas_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
-                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:layout_marginTop="14dp"
                             android:layout_marginBottom="8dp"
-                            android:text="Tareas finalizadas:"
-                            android:textSize="16sp"
+                            android:text="Tareas finalizadas"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <androidx.recyclerview.widget.RecyclerView

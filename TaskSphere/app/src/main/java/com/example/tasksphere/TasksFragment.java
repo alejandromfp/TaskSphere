@@ -40,24 +40,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 
@@ -242,7 +235,7 @@ public class TasksFragment extends Fragment  {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             TextInputEditText taskname, taskdescription;
 
-            taskname = dialog.findViewById(R.id.task_name);
+            taskname = dialog.findViewById(R.id.fichajetitle);
             taskdescription = dialog.findViewById(R.id.task_description);
 
             //Set combobox con los empleados
@@ -455,7 +448,6 @@ public class TasksFragment extends Fragment  {
         db.collection("tareas")
                 .whereNotEqualTo("fechaFinalizacion",null)
                 .whereEqualTo("asignadaA", mAuth.getCurrentUser().getUid())
-                .orderBy("fechaCreacion", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     tareasTerminadas.clear();
@@ -474,7 +466,6 @@ public class TasksFragment extends Fragment  {
                     }
                     Collections.sort(tareasTerminadas, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
                     adapterTerminadas.notifyDataSetChanged();
-                    mostrarTodos();
                 });
     }
 
@@ -592,4 +583,6 @@ public class TasksFragment extends Fragment  {
                 });
 
     }
+
+
 }

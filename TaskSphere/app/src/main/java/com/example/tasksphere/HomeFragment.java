@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -15,18 +16,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.tasksphere.modelo.entidad.Fichaje;
+import com.example.tasksphere.modelo.entidad.Task;
 import com.example.tasksphere.modelo.entidad.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class HomeFragment extends Fragment {
@@ -36,12 +58,19 @@ public class HomeFragment extends Fragment {
 
     String token;
 
-    ConstraintLayout teamItem;
-    FirebaseAuth mAuth;
+    Button notificationsButton, buttonPlay, buttonPause;
+    ConstraintLayout teamItem, fichajesItem, chatItem;
 
+    Fichaje fichajeActual;
+
+    Timer contador;
+    FirebaseAuth mAuth;
+    int activos;
     FirebaseFirestore db;
     ImageView profileImg;
-    TextView username;
+    TextView username, notificationCount, timer, usernameFichar,ficharTag ;
+
+    View fichar;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,6 +98,8 @@ public class HomeFragment extends Fragment {
         guardarTokenUsuario();
         obtenerDatosDeUsuario();
         setDatosDeUsuario();
+        updateNotificationCount();
+
         return rootView;
     }
     private void getItems(View rootView){
@@ -77,7 +108,7 @@ public class HomeFragment extends Fragment {
         profileImg = rootView.findViewById(R.id.profileimg);
         profileImg.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
-            navController.popBackStack();
+
             navController.navigate(R.id.profile_page);
         });
         username = rootView.findViewById(R.id.username);
@@ -86,6 +117,37 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(requireContext(), TeamActivity.class);
             requireActivity().startActivity(intent);
         });
+
+        fichajesItem = rootView.findViewById(R.id.item_fichajes_horarios);
+        fichajesItem.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), FichajesActivity.class);
+            requireActivity().startActivity(intent);
+        });
+
+        chatItem = rootView.findViewById(R.id.item_chats);
+        chatItem.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), ChatActivity.class);
+            requireActivity().startActivity(intent);
+        });
+
+
+        notificationsButton = rootView.findViewById(R.id.notificationbutton);
+        notificationsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), NotificationActivity.class);
+            intent.putExtra("userId", usuario.getUserId() );
+            requireContext().startActivity(intent);
+        });
+
+        notificationCount = rootView.findViewById(R.id.notificationCount);
+        notificationCount.setVisibility(View.GONE);
+
+        fichar = rootView.findViewById(R.id.fichar);
+        buttonPlay = fichar.findViewById(R.id.botonplay);
+        buttonPause = fichar.findViewById(R.id.botonstop);
+        usernameFichar = fichar.findViewById(R.id.username_fichar);
+        timer = fichar.findViewById(R.id.timer);
+        ficharTag = fichar.findViewById(R.id.fichar_tag);
+
 
     }
 
@@ -104,6 +166,8 @@ public class HomeFragment extends Fragment {
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
                 .into(profileImg);
+        usernameFichar.setText(usuario.getNombre());
+        updateItemFichar();
     }
 
     private void guardarTokenUsuario() {
@@ -126,5 +190,260 @@ public class HomeFragment extends Fragment {
                                 });
                     }
                 });
+    }
+
+    public void obtenerNotificacionesCount(){
+
+        db.collection("users")
+                .document(usuario.getUserId())
+                .collection("notificaciones")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots ->{
+                    int count = queryDocumentSnapshots.getDocuments().size();
+                    if(count > 0){
+                        notificationCount.setVisibility(View.VISIBLE);
+                        notificationCount.setText(String.valueOf(count));
+                    }else
+                        notificationCount.setVisibility(View.GONE);
+                });
+
+    }
+
+
+    private void setFicharItem(){
+        activos = 0;
+        ficharTag.setVisibility(View.VISIBLE);
+        buttonPlay.setVisibility(View.VISIBLE);
+        buttonPause.setVisibility(View.GONE);
+        timer.setVisibility(View.GONE);
+        CollectionReference fichajesRef = db.collection("users")
+                .document(usuario.getUserId())
+                .collection("fichajes");
+
+        fichajesRef.get()
+                .addOnSuccessListener(querySnapshot ->{
+                    Log.d("HOLA123", "eyyy");
+                        if(!querySnapshot.isEmpty()){
+                            Log.d("HOLA123", "Oyyy");
+                            AtomicInteger completedQueries = new AtomicInteger(0);
+                            for (QueryDocumentSnapshot doc: querySnapshot){
+                                fichajesRef.document(doc.getId())
+                                        .collection("listafichajedia")
+                                        .whereNotEqualTo("fechaEmpiezo",null)
+                                        .whereEqualTo("fechaFin", null)
+                                        .get()
+                                        .addOnSuccessListener(subQuerySnapshot -> {
+                                            if(subQuerySnapshot != null){
+                                                Log.d("HOLA123", "eyyy");
+                                                for (QueryDocumentSnapshot subDoc : subQuerySnapshot) {
+                                                    activos++;
+                                                    String subDocId = subDoc.getId();
+                                                    fichajeActual = new Fichaje();
+                                                    fichajeActual.setDocumentFechaId(doc.getId());
+                                                    fichajeActual.setListaFichajeId(subDocId);
+                                                    Log.d("HOLA123", subDocId);
+
+                                                    fichajeActual.setFechaEmpiezo(subDoc.getTimestamp("fechaEmpiezo").toDate());
+                                                    iniciarContador();
+                                                }
+
+                                                if (completedQueries.incrementAndGet() == querySnapshot.size()) {
+                                                    // Todas las consultas han terminado
+                                                    if (activos == 0) {
+                                                        Log.d("121212", "NO ME LO PUEDO CREER HAY 0 ACTIVOS");
+                                                        fichar.setVisibility(View.VISIBLE);
+                                                        ficharTag.setVisibility(View.VISIBLE);
+                                                        buttonPlay.setVisibility(View.VISIBLE);
+                                                        buttonPause.setVisibility(View.GONE);
+                                                        timer.setVisibility(View.GONE);
+                                                        buttonPlay.setOnClickListener(v -> {
+                                                            empezarFichaje();
+
+                                                        });
+                                                    }else{
+                                                        Log.d("121212", "PUES ESTOY PLAYED :D");
+                                                        fichar.setVisibility(View.VISIBLE);
+                                                        ficharTag.setVisibility(View.GONE);
+                                                        buttonPlay.setVisibility(View.GONE);
+                                                        buttonPause.setVisibility(View.VISIBLE);
+                                                        timer.setVisibility(View.VISIBLE);
+                                                        buttonPause.setOnClickListener(v -> {
+                                                            terminarFichaje();
+
+                                                        });
+
+
+                                                    }
+                                                }
+                                            }
+                                        });
+                            }
+                        }else{
+                            fichar.setVisibility(View.VISIBLE);
+                            ficharTag.setVisibility(View.VISIBLE);
+                            buttonPlay.setVisibility(View.VISIBLE);
+                            buttonPause.setVisibility(View.GONE);
+                            timer.setVisibility(View.GONE);
+
+                            buttonPlay.setOnClickListener(v -> {
+                                empezarFichaje();
+                            });
+                        }
+                });
+    }
+
+
+    public void empezarFichaje(){
+        //NOMBRE DOCUMENTO SERA LA FECHA
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String fechaActual = sdf.format(new Date());
+        //NEW FICHAJE
+        Map<String, Object> fichaje = new HashMap<>();
+        fichaje.put("fechaEmpiezo", Timestamp.now());
+        fichaje.put("fechaFin", null);
+
+        //CADA FECHA PUEDE TENER VARIOS FICHAJES
+        DocumentReference parentDocRef = db.collection("users")
+                .document(usuario.getUserId())
+                .collection("fichajes")
+                .document(fechaActual);
+
+        Map<String, Object> parentData = new HashMap<>();
+        parentData.put("exists", true);
+
+        parentDocRef.set(parentData, SetOptions.merge())
+                .addOnCompleteListener(parentTask -> {
+                    if (parentTask.isSuccessful()) {
+                        parentDocRef.collection("listafichajedia")
+                                .add(fichaje)
+                                .addOnCompleteListener(subcollectionTask -> {
+
+                                });
+                    } else {
+                    }
+                });
+    }
+
+    public void terminarFichaje(){
+
+        Map<String, Object> fichajefin = new HashMap<>();
+        fichajefin.put("fechaFin", Timestamp.now());
+
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (contador != null) {
+                    contador.cancel();
+                    contador = null;
+                }
+            }
+        });
+
+        contador = null;
+        timer.setText("00:00:00");
+
+        Log.d("121212",fichajeActual.getDocumentFechaId());
+        db.collection("users")
+                .document(usuario.getUserId())
+                .collection("fichajes")
+                .document(fichajeActual.getDocumentFechaId())
+                .collection("listafichajedia")
+                .document(fichajeActual.getListaFichajeId())
+                .update(fichajefin);
+    }
+    public void updateNotificationCount(){
+        db.collection("users")
+                .document(usuario.getUserId())
+                .collection("notificaciones")
+                .addSnapshotListener((value, error) -> {
+                    if(error !=null)
+                        return;
+                    obtenerNotificacionesCount();
+                });
+    }
+
+    public void onResume() {
+        super.onResume();
+        obtenerNotificacionesCount();
+    }
+
+    public void updateItemFichar(){
+        db.collection("users")
+                .document(usuario.getUserId())
+                .collection("fichajes")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                        doc.getReference().collection("listafichajedia")
+                                .addSnapshotListener((value, error) -> {
+                                    if(error != null)
+                                        return;
+
+                                    setFicharItem();
+                                });
+                    }
+                });
+
+    }
+
+    public void iniciarContador(){
+
+            contador = new Timer();
+            contador.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Obtener la fecha y hora actual
+                            long tiempoActual = System.currentTimeMillis();
+                            long tiempoTranscurrido = tiempoActual - fichajeActual.getFechaEmpiezo().getTime();
+                            String contadorActualizado = milisegundosAContador(tiempoTranscurrido);
+                            timer.setText(contadorActualizado);
+
+                        }
+                    });
+
+                }
+            },1000,1000);
+
+    }
+
+    private String milisegundosAContador(long milisegundos) {
+        // Convierte los milisegundos transcurridos a formato días:horas:minutos:segundos
+        long segundos = milisegundos / 1000;
+        long dias = segundos / (24 * 3600);
+        segundos %= (24 * 3600);
+        long horas = segundos / 3600;
+        segundos %= 3600;
+        long minutos = segundos / 60;
+        segundos %= 60;
+
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", horas, minutos, segundos);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (contador != null) {
+            contador.cancel();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (contador != null) {
+            contador.cancel();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (contador != null) {
+            contador.cancel();
+            contador = null;
+        }
     }
 }

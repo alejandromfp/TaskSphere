@@ -3,6 +3,8 @@ package com.example.tasksphere;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -135,7 +137,7 @@ public class  CalendarActivity extends AppCompatActivity {
                 actualizarFechaTexto(fechaSeleccionada.getTime());
             }
         }, anio, mes, dia);
-
+        dpd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE)); //Añade background blanco al calendar
         dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
         dpd.show();
     }

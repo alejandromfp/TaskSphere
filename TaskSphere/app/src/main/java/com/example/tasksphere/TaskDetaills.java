@@ -62,7 +62,7 @@ public class TaskDetaills extends AppCompatActivity {
     public void getItems(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        taskName = findViewById(R.id.task_name);
+        taskName = findViewById(R.id.fichajetitle);
         taskDescription = findViewById(R.id.task_description);
         taskFechaInicio = findViewById(R.id.task_fechainicio);
         taskFechafinal  = findViewById(R.id.task_fechafinal);

@@ -11,7 +11,7 @@
     android:layout_margin="16dp">
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/fichar_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
@@ -19,7 +19,8 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
 
     <TextView
@@ -30,10 +31,11 @@
         android:text="Alfonso"
         android:textColor="@color/azulMasClaro"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/botonplay"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:paddingLeft="12dp"
@@ -43,6 +45,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="00:00:00"
+        android:textColor="#00F3DD"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/botonstop"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/button_ripple"
+        android:drawableLeft="@drawable/stop_icon"
+        android:paddingLeft="13dp"
+        app:backgroundTint="@color/rojoCoral"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.555"
+        android:visibility="gone"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

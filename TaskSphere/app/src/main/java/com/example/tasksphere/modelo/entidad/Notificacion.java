@@ -1,8 +1,11 @@
 package com.example.tasksphere.modelo.entidad;
 
+import java.util.Date;
+
 public class Notificacion {
 
-    private String title, body , categoria , fechaCreacion;
+    private String notificationId , title, body , categoria ;
+    Date fechaCreacion;
 
     public Notificacion() {
     }
@@ -31,12 +34,19 @@ public class Notificacion {
         this.categoria = categoria;
     }
 
-    public String getFechaCreacion() {
+    public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(String fechaCreacion) {
+    public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public String getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(String notificationId) {
+        this.notificationId = notificationId;
+    }
 }

@@ -38,18 +38,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void mostrarNotificacion(String title, String body) {
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(this.NOTIFICATION_SERVICE);
-
-        Intent intent = new Intent(this, Login.class); // Reemplaza MainActivity con tu actividad principal
+        Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Construir y mostrar la notificación
+
+        android.app.Notification.Style style = new android.app.Notification.BigTextStyle().bigText(body);
         Notification.Builder builder = new Notification.Builder(this, "channel_id")
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // Icono de notificación
-                .setContentTitle(title) // Título de la notificación
-                .setContentText(body) // Contenido de la notificación
+                .setSmallIcon(android.R.drawable.ic_dialog_info) //CAMBIAR AQUI POR EL ICONO DE LA APP
+                .setContentTitle(title)
+                .setContentText(body)
+                .setStyle(style)
+                .setWhen(System.currentTimeMillis())
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true); // Permitir que la notificación se cierre al hacer clic en ella
+                .setAutoCancel(true);
 
         // Mostrar la notificación
         notificationManager.notify(23232, builder.build());

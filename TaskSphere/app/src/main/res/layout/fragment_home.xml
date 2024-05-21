@@ -7,12 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include
+        android:id="@+id/fichar"
         android:layout_width="match_parent"
         android:layout_margin="16dp"
         android:layout_height="wrap_content"
         layout="@layout/item_fichar"
         android:layout_gravity="bottom|center_horizontal"
+        android:visibility="gone"
         />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,18 +28,42 @@
             tools:context=".ProfileFragment">
 
 
-            <Button
-                android:id="@+id/backbutton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/button_ripple"
-                android:drawableLeft="@drawable/bell"
-                android:paddingLeft="7.5dp"
-                app:backgroundTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/cardView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cardView" />
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="@+id/cardView">
+
+                <Button
+                    android:id="@+id/notificationbutton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_ripple"
+                    android:drawableLeft="@drawable/bell"
+                    android:paddingLeft="5dp"
+                    app:backgroundTint="@color/white" />
+
+                <TextView
+                    android:id="@+id/notificationCount"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_alignTop="@id/notificationbutton"
+                    android:layout_alignEnd="@id/notificationbutton"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginEnd="-5dp"
+                    android:background="@drawable/notification_background"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
@@ -110,6 +137,7 @@
 
                 <include layout="@layout/item_comunicados"/>
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/item_fichajes_horarios"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/item_task_style"
@@ -131,7 +159,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/task_name"
+                        android:id="@+id/fichajetitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -203,6 +231,62 @@
 
                     <ImageView
                         android:id="@+id/action_button2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="2dp"
+                        android:backgroundTint="#00FFFFFF"
+                        android:gravity="center"
+                        android:minWidth="0dp"
+                        android:src="@drawable/arrow_next"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/item_chats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_task_style"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:elevation="4dp"
+                    android:padding="16dp">
+
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/location"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/chat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+
+                        android:text="Chats"
+                        android:textColor="@color/azulMasOscuro"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.454" />
+
+                    <ImageView
+                        android:id="@+id/action_button3"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginTop="2dp"

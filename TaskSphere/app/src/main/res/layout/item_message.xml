@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="start"
+    >
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+
+        android:fontFamily="@font/poppins_regular"
+        android:text="Alfonso"
+        android:textSize="11sp"
+        />
+
+    <TextView
+        android:id="@+id/message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="50dp"
+        android:padding="12dp"
+
+        android:backgroundTint="#D5E9F6"
+        android:background="@drawable/edittext_background"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/azulOscuro"
+        android:text="Mensaje "
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/hora_mensaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+
+        android:fontFamily="@font/poppins_regular"
+        android:text="00:00"
+        android:textSize="11sp" />
+
+</LinearLayout>

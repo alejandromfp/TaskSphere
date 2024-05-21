@@ -33,6 +33,16 @@ public class TareasAdapter extends RecyclerView.Adapter<TareasAdapter.TareaViewH
     public void onBindViewHolder(@NonNull TareaViewHolder holder, int position) {
         Task tarea = tasksList.get(position);
         holder.nombreTextView.setText(tarea.getTaskName());
+
+        if(tarea.getAsignadaA() == null)
+            holder.category.setText("Tarea sin asignar");
+        else if (tarea.getAsignadaA() != null && tarea.getFechaInicio() == null) {
+            holder.category.setText("Tarea pendiente - No ha empezado");
+        }else if (tarea.getAsignadaA() != null && tarea.getFechaInicio() != null && tarea.getFechaFinal() == null) {
+            holder.category.setText("Tarea pendiente - Ya ha empezado");
+        }else if (tarea.getAsignadaA() != null && tarea.getFechaInicio() != null && tarea.getFechaFinal() != null) {
+            holder.category.setText("Tarea finalizada");
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,10 +60,12 @@ public class TareasAdapter extends RecyclerView.Adapter<TareasAdapter.TareaViewH
 
     public class TareaViewHolder extends RecyclerView.ViewHolder {
         TextView nombreTextView;
+        TextView category;
         private Task tarea;
         public TareaViewHolder(@NonNull View itemView) {
             super(itemView);
-            nombreTextView = itemView.findViewById(R.id.task_name);
+            nombreTextView = itemView.findViewById(R.id.fichajetitle);
+            category = itemView.findViewById(R.id.category);
         }
     }
 
