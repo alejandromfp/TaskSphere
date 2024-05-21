@@ -37,6 +37,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity:1.8.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.google.firebase:firebase-inappmessaging")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -50,7 +51,6 @@ dependencies {
     implementation ("com.github.yalantis:ucrop:2.2.6")
     implementation ("com.google.code.gson:gson:2.8.8")
     implementation ("com.google.firebase:firebase-messaging")
-    implementation ("com.google.firebase:firebase-analytics")
     implementation ("com.android.volley:volley:1.2.1")
 }
 

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     FirebaseFirestore db;
     ImageView profileImg;
+    Button logOut;
     TextView username;
 
     public HomeFragment() {
@@ -87,6 +89,27 @@ public class HomeFragment extends Fragment {
             requireActivity().startActivity(intent);
         });
 
+        Button logOutButton = rootView.findViewById(R.id.logOutButton);
+        logOutButton.setOnClickListener(v -> {
+            logOut();
+        });
+    }
+    private void logOut() {
+        mAuth.signOut();
+        clearUserData();
+
+        // Redirigir a la pantalla de inicio de sesión
+        Intent intent = new Intent(requireContext(), Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Evitar que el usuario vuelva a la pantalla anterior utilizando el botno de retroceso
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
+    private void clearUserData() {
+        // Limpiar los datos de SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     private void obtenerDatosDeUsuario(){

@@ -1,19 +1,23 @@
 package com.example.tasksphere.model;
 
 public class Comunicado {
-        String user, title, description, dateCreation;
+        String id, user, title, description, dateCreation;
 
 
         public Comunicado() {
-            // Constructor vacío necesario para Firestore
         }
 
-        public Comunicado(String user, String title, String description, String dateCreation) {
+        public Comunicado(String id, String user, String title, String description, String dateCreation) {
+            this.id = id;
             this.user = user;
             this.title = title;
             this.description = description;
             this.dateCreation = dateCreation;
         }
+
+        public String getId() {return id; }
+
+        public void setId(String id) {this.id = id; }
 
         public String getUser() {
             return user;

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.tasksphere.adapter.ComunicadosAdapter;
+import com.example.tasksphere.model.Comunicado;
 import com.example.tasksphere.modelo.entidad.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,9 +36,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,9 +58,12 @@ public class ComunicadosFragment extends Fragment {
     FirebaseAuth mAuth;
     Dialog dialog;
 
+    RecyclerView recyclerViewComunicados;
+    ComunicadosAdapter comunicadosAdapter;
+    List<Comunicado> comunicadosList = new ArrayList<>();
     FloatingActionButton addNews;
 
-    Button saveNew;
+    Button saveNew, cancelNew;
     FirebaseFirestore db;
     ImageView profileImg;
     TextView username;
@@ -83,10 +94,11 @@ public class ComunicadosFragment extends Fragment {
         getItems(rootView);
         obtenerDatosDeUsuario();
         setDatosDeUsuario();
+        cargarComunicados();
         return rootView;
     }
 
-    private void getItems(View rootView){
+    private void getItems(View rootView) {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         profileImg = rootView.findViewById(R.id.profileImg);
@@ -96,6 +108,7 @@ public class ComunicadosFragment extends Fragment {
             navController.navigate(R.id.profile_page);
         });
         username = rootView.findViewById(R.id.username);
+
 
         //New Task
 
@@ -107,6 +120,8 @@ public class ComunicadosFragment extends Fragment {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             saveNew = dialog.findViewById(R.id.saveButton);
+            cancelNew = dialog.findViewById(R.id.cancelButton);
+
             saveNew.setOnClickListener(v1 -> {
                 //AGREGAR TAREA A BASE DE DATOS TODO
                 TextInputEditText titleInput = dialog.findViewById(R.id.titleinput);
@@ -114,24 +129,29 @@ public class ComunicadosFragment extends Fragment {
                 guardarComunicado(titleInput.getText().toString(), descriptionInput.getText().toString());
                 dialog.dismiss();
 
-
-
             });
+
+            cancelNew.setOnClickListener(v1 -> {
+                // Cerrar el diálogo cuando se presiona el botón Cancelar
+                dialog.dismiss();
+            });
+
             dialog.show();
         });
     }
 
-    private void obtenerDatosDeUsuario(){
+    private void obtenerDatosDeUsuario() {
         sharedPreferences = requireContext().getSharedPreferences("usuario", Context.MODE_PRIVATE);
         String userJson = sharedPreferences.getString("userJson", "uwu");
         Log.d("JSON", userJson);
-        if(userJson != null){
+        if (userJson != null) {
             Gson gson = new Gson();
             usuario = gson.fromJson(userJson, User.class);
         }
 
     }
-    private void setDatosDeUsuario(){
+
+    private void setDatosDeUsuario() {
         username.setText(usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
@@ -140,6 +160,12 @@ public class ComunicadosFragment extends Fragment {
 
 
     public void guardarComunicado(String titulo, String descripcion) {
+
+        if (titulo.isEmpty() || descripcion.isEmpty()) {
+            Toast.makeText(requireContext(), "Por favor, rellena ambos campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference comunicadosRef = db.collection("Comunicados");
 
@@ -165,5 +191,23 @@ public class ComunicadosFragment extends Fragment {
                     }
                 });
     }
-
+    private void cargarComunicados() {
+        db.collection("Comunicados")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    comunicadosList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Comunicado comunicado = new Comunicado(
+                                document.getId(),
+                                document.getString("user"),
+                                document.getString("title"),
+                                document.getString("description"),
+                                document.getString("dateCreation")
+                        );
+                        comunicadosList.add(comunicado);
+                    }
+                    comunicadosAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al obtener los comunicados", Toast.LENGTH_SHORT).show());
+    }
 }
