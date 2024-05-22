@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     SharedPreferences sharedPreferences;
     FirebaseStorage storage;
 
-    TextView name, apellidos, dni, fecha_nac, direccion, localidad, biografia, username, userEmail;
+    TextView name, apellidos, dni, fecha_nac, direccion, localidad, biografia, username, userEmail, userRol;
 
     Button editUser;
 
@@ -123,6 +123,7 @@ public class ProfileFragment extends Fragment {
         localidad = rootView.findViewById(R.id.localidad);
         biografia = rootView.findViewById(R.id.biografia);
         userEmail = rootView.findViewById(R.id.useremail);
+        userRol = rootView.findViewById(R.id.rol);
         editUser = rootView.findViewById(R.id.edit);
         editUser.setOnClickListener(v -> {
             dialog = new Dialog(requireContext());
@@ -237,12 +238,19 @@ public class ProfileFragment extends Fragment {
         localidad.setText(usuario.getLocalidad());
         fecha_nac.setText(usuario.getFechaNac());
         biografia.setText(usuario.getBiografia());
+        userRol.setText(usuario.getRol());
 
         if (isAdded() && getContext() != null) {
             Glide.with(requireContext())
                     .load(usuario.getProfileImage())
+                    .placeholder(R.drawable.defaultavatar)
                     .into(profileImageView);
+
         }
+        if (usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")){
+            editUser.setVisibility(View.VISIBLE);
+        }else
+            editUser.setVisibility(View.GONE);
     }
     private void actualizarDatos(){
         db.collection("users")

@@ -55,7 +55,7 @@ public class ComunicadosFragment extends Fragment {
     Button saveNew;
     FirebaseFirestore db;
     ImageView profileImg;
-    TextView username;
+    TextView username , userRole;
 
     public ComunicadosFragment() {
         // Required empty public constructor
@@ -95,7 +95,9 @@ public class ComunicadosFragment extends Fragment {
             navController.popBackStack();
             navController.navigate(R.id.profile_page);
         });
+
         username = rootView.findViewById(R.id.username);
+        userRole = rootView.findViewById(R.id.userRole);
 
         //New Task
 
@@ -135,7 +137,9 @@ public class ComunicadosFragment extends Fragment {
         username.setText(usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
+                .placeholder(R.drawable.defaultavatar)
                 .into(profileImg);
+        userRole.setText(usuario.getRol());
     }
 
 

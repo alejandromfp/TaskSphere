@@ -98,12 +98,31 @@ public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.Mensaj
         private String transformDateToHours(String dateTimeString){
 
             String result = null;
+
             if(dateTimeString != null){
+                DateTimeFormatter formatter;
+                LocalDateTime localDateTime;
                 // Formateador para analizar el String en LocalDateTime
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                try{
+                     formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                    localDateTime= LocalDateTime.parse(dateTimeString, formatter);
+                } catch (Exception e){
+
+                     try{
+                         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.S");
+                         localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+
+                     } catch (Exception exception){
+                         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SS");
+                         localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+                         
+                     }
+                }
+
 
                 // Convertir el String en LocalDateTime
-                LocalDateTime localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+
+
 
                 int horas = localDateTime.getHour();
                 int minutos = localDateTime.getMinute();

@@ -51,7 +51,7 @@ public class CalendarFragment extends Fragment {
 
     FirebaseFirestore db;
     ImageView profileImg;
-    TextView username;
+    TextView username, userRole;
 
     public CalendarFragment() {
 
@@ -202,7 +202,9 @@ public class CalendarFragment extends Fragment {
         username.setText(usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
+                .placeholder(R.drawable.defaultavatar)
                 .into(profileImg);
+        userRole.setText(usuario.getRol());
     }
 
 
@@ -218,6 +220,7 @@ public class CalendarFragment extends Fragment {
         });
 
         username = rootView.findViewById(R.id.username);
+        userRole = rootView.findViewById(R.id.userRole);
         profileImg = rootView.findViewById(R.id.profileImg);
         profileImg.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);

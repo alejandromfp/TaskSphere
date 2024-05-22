@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import com.example.tasksphere.adapter.FichajesAdapter;
 import com.example.tasksphere.adapter.MensajesAdapter;
 import com.example.tasksphere.modelo.entidad.Message;
 import com.example.tasksphere.modelo.entidad.User;
+import com.google.firebase.storage.StorageReference;
 import com.google.firestore.v1.Value;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,20 +52,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private final String API_URL = "http://192.168.1.59:8080";
+    private final String API_URL = "https://tasksphere-chat.zeabur.app";
 
-    private final String WEBSOCKET_URL = "ws://192.168.1.59:8080/chat";
+    private final String WEBSOCKET_URL = "ws://tasksphere-chat.zeabur.app/chat";
 
     private Gson mGson = new GsonBuilder().create();
     RecyclerView recyclerMensajes;
 
     EditText chatInput;
-    Button sendMessage;
+
+    Button sendMessage, backButton;
+
+    ProgressDialog progressDialog;
 
     private StompClient stompClient;
     MensajesAdapter adapter;
 
-    ChatWebSocketListener chatWebSocketListener;
 
     SharedPreferences sharedPreferences;
     User usuario;
@@ -72,27 +78,40 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         obtenerDatosDeUsuario();
+
         recyclerMensajes  = findViewById(R.id.recyclerContainer);
         adapter = new MensajesAdapter(this, chatHistory, usuario.getUserId());
         recyclerMensajes.setAdapter(adapter);
+        backButton = findViewById(R.id.backbutton);
+        backButton.setOnClickListener(v -> {
+            onBackPressed();
+        });
         recyclerMensajes.setLayoutManager(new LinearLayoutManager(this));
         chatInput = findViewById(R.id.chat_input);
+        chatInput.setOnClickListener(v -> {
+            if(chatHistory.size()>0)
+                recyclerMensajes.smoothScrollToPosition(chatHistory.size()-1);
+        });
         sendMessage = findViewById(R.id.sendbutton);
         sendMessage.setOnClickListener(v -> {
             enviarMensaje();
         });
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ChatApi api = retrofit.create(ChatApi.class);
         Call<List<Message>> call = api.getChatHistory();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando chats...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, WEBSOCKET_URL);
         stompClient.connect();
 
         call.enqueue(new Callback<List<Message>>() {
+
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
                 if (response.isSuccessful()) {
@@ -103,6 +122,7 @@ public class ChatActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     if(chatHistory.size()>0)
                         recyclerMensajes.smoothScrollToPosition(chatHistory.size()-1);
+                    progressDialog.dismiss();
                     escucharWebSocket();
                 }
             }
@@ -127,26 +147,27 @@ public class ChatActivity extends AppCompatActivity {
            newMessage.setUsername(usuario.getNombre());
            newMessage.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")));
            newMessage.setContent(chatInput.getText().toString());
+           chatInput.setText("");
            Log.d("sendMessage", gson.toJson(newMessage));
            stompClient.send("/app/chat.sendMessage", gson.toJson(newMessage)).subscribe();
     }
 
     @SuppressLint("CheckResult")
     public void escucharWebSocket() {
-
-
         stompClient.topic("/topic/chat").subscribe(topicMessage -> {
             runOnUiThread(() -> {
                 Log.d("121212", "Received " + topicMessage.getPayload());
                 Message newMessage = mGson.fromJson(topicMessage.getPayload(), Message.class);
                 chatHistory.add(newMessage);
                 adapter.notifyDataSetChanged();
-                recyclerMensajes.smoothScrollToPosition(chatHistory.size()-1);
+                if(chatHistory.size()>0)
+                    recyclerMensajes.smoothScrollToPosition(chatHistory.size()-1);
             });
         }, throwable -> {
             Log.e("121212", "Error on subscribe topic", throwable);
         });
     }
+
     private void obtenerDatosDeUsuario(){
         sharedPreferences = this.getSharedPreferences("usuario", Context.MODE_PRIVATE);
         String userJson = sharedPreferences.getString("userJson", "uwu");
@@ -155,7 +176,9 @@ public class ChatActivity extends AppCompatActivity {
             Gson gson = new Gson();
             usuario = gson.fromJson(userJson, User.class);
         }
-
     }
+
+
+
 
 }

@@ -79,7 +79,7 @@ public class TasksFragment extends Fragment  {
 
     FirebaseFirestore db;
     ImageView profileImg;
-    TextView username;
+    TextView username, userRole;
 
 
     public TasksFragment() {
@@ -257,7 +257,8 @@ public class TasksFragment extends Fragment  {
         });
 
         username = rootView.findViewById(R.id.username);
-        profileImg = rootView.findViewById(R.id.profileImg);
+        userRole = rootView.findViewById(R.id.userRole);
+        profileImg = rootView.findViewById(R.id.profileimg);
         profileImg.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.popBackStack();
@@ -298,7 +299,13 @@ public class TasksFragment extends Fragment  {
         Log.d("123456", usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
+                .placeholder(R.drawable.defaultavatar)
                 .into(profileImg);
+        userRole.setText(usuario.getRol());
+        if(usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")){
+            addTask.setVisibility(View.VISIBLE);
+        }else
+            addTask.setVisibility(View.GONE);
     }
 
     private void getEmpleados(Spinner spinner){
@@ -414,8 +421,13 @@ public class TasksFragment extends Fragment  {
                         Log.d("TAREASINASIGNAR", tarea.getTaskName());
                         tareasSinAsignar.add(tarea);
                     }
-                    Collections.sort(tareasSinAsignar, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
-                    adapterSinAsignar.notifyDataSetChanged();
+                    if(tareasSinAsignar.size()>0){
+                        Collections.sort(tareasSinAsignar, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
+                        adapterSinAsignar.notifyDataSetChanged();
+                        sinAsignarContainer.setVisibility(View.VISIBLE);
+                    }else
+                        sinAsignarContainer.setVisibility(View.GONE);
+
                 });
     }
 
@@ -439,8 +451,14 @@ public class TasksFragment extends Fragment  {
                         Log.d("TAREAPENDIENTE", tarea.getTaskName());
                         tareasPendientes.add(tarea);
                     }
-                    Collections.sort(tareasPendientes, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
-                    adapterPendientes.notifyDataSetChanged();
+
+                    if(tareasPendientes.size()>0){
+                        Collections.sort(tareasPendientes, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
+                        adapterPendientes.notifyDataSetChanged();
+                        pendientesContainer.setVisibility(View.VISIBLE);
+                    }else
+                        pendientesContainer.setVisibility(View.GONE);
+
                 });
     }
     private void obtenerTareasTerminadas(){
@@ -464,8 +482,14 @@ public class TasksFragment extends Fragment  {
                         tareasTerminadas.add(tarea);
 
                     }
-                    Collections.sort(tareasTerminadas, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
-                    adapterTerminadas.notifyDataSetChanged();
+                    if(tareasTerminadas.size()>0){
+                        Collections.sort(tareasTerminadas, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
+                        adapterTerminadas.notifyDataSetChanged();
+                        finalizadasContainer.setVisibility(View.VISIBLE);
+                    }else
+                        finalizadasContainer.setVisibility(View.GONE);
+
+
                 });
     }
 

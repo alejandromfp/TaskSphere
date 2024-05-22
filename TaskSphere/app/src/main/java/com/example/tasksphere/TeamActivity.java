@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.tasksphere.adapter.UserCardAdapter;
@@ -22,6 +23,8 @@ public class TeamActivity extends AppCompatActivity {
     List<User> equipo = new ArrayList<>();
     RecyclerView recyclerView;
     UserCardAdapter adapter;
+
+    Button backButton;
 
     FirebaseFirestore db;
 
@@ -42,7 +45,10 @@ public class TeamActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerContainer);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
-
+        backButton = findViewById(R.id.backbutton);
+        backButton.setOnClickListener(v -> {
+            onBackPressed();
+        });
     }
 
     public void obtenerListaDeUsuarios(){
@@ -75,5 +81,9 @@ public class TeamActivity extends AppCompatActivity {
                     });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        obtenerListaDeUsuarios();
+    }
 }

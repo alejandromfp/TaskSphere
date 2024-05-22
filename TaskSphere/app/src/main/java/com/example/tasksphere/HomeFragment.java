@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,10 @@ public class HomeFragment extends Fragment {
     int activos;
     FirebaseFirestore db;
     ImageView profileImg;
-    TextView username, notificationCount, timer, usernameFichar,ficharTag ;
+
+    Handler handler;
+    Runnable timerRunnable ;
+    TextView username,userRole, notificationCount, timer, usernameFichar,ficharTag ;
 
     View fichar;
 
@@ -108,10 +112,11 @@ public class HomeFragment extends Fragment {
         profileImg = rootView.findViewById(R.id.profileimg);
         profileImg.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
-
+            navController.popBackStack();
             navController.navigate(R.id.profile_page);
         });
         username = rootView.findViewById(R.id.username);
+        userRole = rootView.findViewById(R.id.userRole);
         teamItem = rootView.findViewById(R.id.team_item);
         teamItem.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), TeamActivity.class);
@@ -147,7 +152,19 @@ public class HomeFragment extends Fragment {
         usernameFichar = fichar.findViewById(R.id.username_fichar);
         timer = fichar.findViewById(R.id.timer);
         ficharTag = fichar.findViewById(R.id.fichar_tag);
-
+        handler = new Handler();
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isAdded()) {
+                    long tiempoActual = System.currentTimeMillis();
+                    long tiempoTranscurrido = tiempoActual - fichajeActual.getFechaEmpiezo().getTime();
+                    String contadorActualizado = milisegundosAContador(tiempoTranscurrido);
+                    timer.setText(contadorActualizado);
+                    handler.postDelayed(this, 1000);
+                }
+            }
+        };
 
     }
 
@@ -165,7 +182,9 @@ public class HomeFragment extends Fragment {
         username.setText(usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
+                .placeholder(R.drawable.defaultavatar)
                 .into(profileImg);
+        userRole.setText(usuario.getRol());
         usernameFichar.setText(usuario.getNombre());
         updateItemFichar();
     }
@@ -258,6 +277,7 @@ public class HomeFragment extends Fragment {
                                                         timer.setVisibility(View.GONE);
                                                         buttonPlay.setOnClickListener(v -> {
                                                             empezarFichaje();
+                                                            setFicharItem();
 
                                                         });
                                                     }else{
@@ -328,18 +348,7 @@ public class HomeFragment extends Fragment {
 
         Map<String, Object> fichajefin = new HashMap<>();
         fichajefin.put("fechaFin", Timestamp.now());
-
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (contador != null) {
-                    contador.cancel();
-                    contador = null;
-                }
-            }
-        });
-
-        contador = null;
+        detenerContador();
         timer.setText("00:00:00");
 
         Log.d("121212",fichajeActual.getDocumentFechaId());
@@ -378,7 +387,6 @@ public class HomeFragment extends Fragment {
                                 .addSnapshotListener((value, error) -> {
                                     if(error != null)
                                         return;
-
                                     setFicharItem();
                                 });
                     }
@@ -387,26 +395,11 @@ public class HomeFragment extends Fragment {
     }
 
     public void iniciarContador(){
+        handler.post(timerRunnable);
+    }
 
-            contador = new Timer();
-            contador.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Obtener la fecha y hora actual
-                            long tiempoActual = System.currentTimeMillis();
-                            long tiempoTranscurrido = tiempoActual - fichajeActual.getFechaEmpiezo().getTime();
-                            String contadorActualizado = milisegundosAContador(tiempoTranscurrido);
-                            timer.setText(contadorActualizado);
-
-                        }
-                    });
-
-                }
-            },1000,1000);
-
+    public void detenerContador() {
+        handler.removeCallbacks(timerRunnable); // Detiene el temporizador
     }
 
     private String milisegundosAContador(long milisegundos) {
@@ -431,19 +424,8 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (contador != null) {
-            contador.cancel();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (contador != null) {
-            contador.cancel();
-            contador = null;
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        detenerContador();
     }
 }
