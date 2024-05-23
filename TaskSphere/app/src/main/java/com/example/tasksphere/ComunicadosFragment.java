@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,6 +42,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,10 +93,10 @@ public class ComunicadosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_comunicados, container, false);
-        getItems(rootView);
         obtenerDatosDeUsuario();
+        getItems(rootView);
         setDatosDeUsuario();
-        cargarComunicados();
+        listenerComunicados();
         return rootView;
     }
 
@@ -108,6 +110,11 @@ public class ComunicadosFragment extends Fragment {
             navController.navigate(R.id.profile_page);
         });
         username = rootView.findViewById(R.id.username);
+        recyclerViewComunicados = rootView.findViewById(R.id.recyclerViewComunicados);
+        comunicadosAdapter = new ComunicadosAdapter(requireContext(), comunicadosList, usuario.getUserId());
+        recyclerViewComunicados.setAdapter(comunicadosAdapter);
+        recyclerViewComunicados.setLayoutManager(new LinearLayoutManager(requireContext()));
+
 
 
         //New Task
@@ -173,7 +180,7 @@ public class ComunicadosFragment extends Fragment {
         Map<String, Object> comunicado = new HashMap<>();
         comunicado.put("titulo", titulo);
         comunicado.put("descripcion", descripcion);
-        comunicado.put("fecha_creacion", FieldValue.serverTimestamp());
+        comunicado.put("fecha_creacion", Timestamp.now());
         comunicado.put("id_usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         // Agregar el comunicado a la colecciÃ³n "comunicados"
@@ -199,15 +206,26 @@ public class ComunicadosFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Comunicado comunicado = new Comunicado(
                                 document.getId(),
-                                document.getString("user"),
-                                document.getString("title"),
-                                document.getString("description"),
-                                document.getString("dateCreation")
+                                document.getString("id_usuario"),
+                                document.getString("titulo"),
+                                document.getString("descripcion"),
+                                document.getTimestamp("fecha_creacion").toDate()
                         );
                         comunicadosList.add(comunicado);
                     }
+                    Collections.sort(comunicadosList, (t1, t2) -> t2.getDateCreation().compareTo(t1.getDateCreation()));
                     comunicadosAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al obtener los comunicados", Toast.LENGTH_SHORT).show());
+    }
+
+    public void listenerComunicados(){
+        db.collection("Comunicados")
+                .addSnapshotListener((value, error) -> {
+                    if(error != null)
+                        return;
+                    cargarComunicados();
+                });
+
     }
 }

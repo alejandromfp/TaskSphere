@@ -1,13 +1,16 @@
 package com.example.tasksphere.model;
 
+import java.util.Date;
+
 public class Comunicado {
-        String id, user, title, description, dateCreation;
+        String id, user, title, description;
+        Date dateCreation;
 
 
         public Comunicado() {
         }
 
-        public Comunicado(String id, String user, String title, String description, String dateCreation) {
+        public Comunicado(String id, String user, String title, String description, Date dateCreation) {
             this.id = id;
             this.user = user;
             this.title = title;
@@ -43,11 +46,11 @@ public class Comunicado {
             this.description = description;
         }
 
-        public String getDateCreation() {
+        public Date getDateCreation() {
             return dateCreation;
         }
 
-        public void setDateCreation(String dateCreation) {
+        public void setDateCreation(Date dateCreation) {
             this.dateCreation = dateCreation;
         }
     }

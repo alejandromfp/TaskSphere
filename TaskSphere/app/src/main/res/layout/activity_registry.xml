@@ -6,195 +6,212 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/titulo"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Crea tu cuenta de TaskSphere"
-        android:textColor="@color/azulOscuro"
-        android:textColorHighlight="@color/azulOscuro"
-        android:textColorHint="@color/azulOscuro"
-        android:textColorLink="@color/azulOscuro"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutNombre"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaNombre"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Nombre"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="175dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutApellidos"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutNombre">
+            <TextView
+                android:id="@+id/titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Crea tu cuenta de TaskSphere"
+                android:textColor="@color/azulOscuro"
+                android:textColorHighlight="@color/azulOscuro"
+                android:textColorHint="@color/azulOscuro"
+                android:textColorLink="@color/azulOscuro"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaApellidos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Apellidos"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="273dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutNombre"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titulo">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="175dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutDireccion"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutApellidos">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutApellidos"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutNombre">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaDireccion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Direccion"
-            tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="366dp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutCiudad"
-        android:layout_width="156dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/layoutTelefono"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaCiudad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ciudad" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutTelefono"
-        android:layout_width="178dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaTelefono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Telefono" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutFechaNacimiento"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutCiudad">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaFechaNacimiento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha de Nacimiento" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutDni"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutFechaNacimiento">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaDni"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="DNI" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutEmail"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutDni">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaApellidos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Apellidos"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="273dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="578dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDireccion"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutApellidos">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Direccion"
+                    tools:layout_editor_absoluteX="3dp"
+                    tools:layout_editor_absoluteY="366dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutCiudad"
+                android:layout_width="156dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="@+id/layoutDireccion"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaCiudad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ciudad" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutTelefono"
+                android:layout_width="178dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/layoutDireccion"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/layoutCiudad"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDireccion">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Telefono" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutFechaNacimiento"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutCiudad">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaFechaNacimiento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Fecha de Nacimiento" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDni"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutFechaNacimiento">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaDni"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="DNI" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutEmail"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDni">
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layoutContraseña"
-        android:layout_width="347dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="578dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cajaPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Contraseña"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="578dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutContraseña"
+                android:layout_width="347dp"
+                android:layout_height="59dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutEmail">
 
-    <Button
-        android:id="@+id/botonCrearCuenta"
-        android:layout_width="205dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="25dp"
-        android:backgroundTint="@color/azulOscuro"
-        android:textColor="@color/white"
-        android:text="Registrarme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutContraseña"
-        />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cajaPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Contraseña"
+                    tools:layout_editor_absoluteX="1dp"
+                    tools:layout_editor_absoluteY="578dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/botonCrearCuenta"
+                android:layout_width="205dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="32dp"
+                android:backgroundTint="@color/azulOscuro"
+                android:text="Registrarme"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutContraseña" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

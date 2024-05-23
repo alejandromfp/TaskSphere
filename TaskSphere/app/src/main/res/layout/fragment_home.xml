@@ -89,9 +89,11 @@
                 android:padding="10dp"
                 app:cardCornerRadius="15dp"
 
-                app:cardElevation="80dp"
+                app:cardElevation="dp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerContainer"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:outlineSpotShadowColor="@color/azulMasOscuro"
+                android:outlineAmbientShadowColor="@color/white"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
