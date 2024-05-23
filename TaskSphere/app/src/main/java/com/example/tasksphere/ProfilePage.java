@@ -28,9 +28,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.tasksphere.modelo.entidad.Rol;
 import com.example.tasksphere.modelo.entidad.User;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -58,7 +62,7 @@ public class ProfilePage extends AppCompatActivity {
 
     TextView name, apellidos, dni, fecha_nac, direccion, localidad, biografia, username, userEmail, rolTag;
 
-    Button editUser;
+    Button editUser, editRol;
 
     Dialog dialog;
 
@@ -104,6 +108,7 @@ public class ProfilePage extends AppCompatActivity {
         biografia =findViewById(R.id.biografia);
         userEmail = findViewById(R.id.useremail);
         rolTag = findViewById(R.id.rol_tag);
+        editRol = findViewById(R.id.edit_laborales);
         spinner = findViewById(R.id.rol);
 
 
@@ -117,8 +122,6 @@ public class ProfilePage extends AppCompatActivity {
 
         });
 
-        if(loginUser.getRol().equals("empleado"))
-            editUser.setVisibility(View.GONE);
 
     }
 
@@ -138,14 +141,18 @@ public class ProfilePage extends AppCompatActivity {
         if (!isFinishing() && !isDestroyed()) {
             Glide.with(this)
                     .load(usuario.getProfileImage())
+                    .placeholder(R.drawable.defaultavatar)
                     .into(profileImageView);
         }
 
         if(loginUser.getRol().equals("Administrador")){
+
             spinner.setVisibility(View.VISIBLE);
             rolTag.setVisibility(View.GONE);
             setRolSpinner(spinner);
         }else{
+            editRol.setVisibility(View.GONE);
+            editUser.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
             rolTag.setVisibility(View.VISIBLE);
         }
@@ -195,6 +202,7 @@ public class ProfilePage extends AppCompatActivity {
                     usuario.setTelefono(doc.getString("telefono"));
                     usuario.setBiografia(doc.getString("biografia"));
                     usuario.setProfileImage(doc.getString("profile_img_path"));
+                    usuario.setUserToken(doc.getString("token"));
                     setDatosDeUsuario();
                 });
     }
@@ -327,6 +335,14 @@ public class ProfilePage extends AppCompatActivity {
                                                 .addOnSuccessListener(command -> {
                                                     usuario.setRolId(rolSeleccionado.getRolId());
                                                     usuario.setRol(rolSeleccionado.getRolName());
+
+                                                    //NOTIFICAMOS AL USUARIO
+                                                    enviarNotificacion(
+                                                            usuario.getUserToken(),
+                                                            "Equipo",
+                                                            "El administrador te ha asignado el Rol de "+ usuario.getRol(),
+                                                            usuario.getUserId()
+                                                    );
                                                     Log.d("ROLCHANGE", "Se ha cambiado el rol");
                                                 });
 
@@ -339,8 +355,69 @@ public class ProfilePage extends AppCompatActivity {
                                 }
 
                             });
+
+
                         }
                     }
             );
     }
+
+    private void enviarNotificacion(String token, String title, String body, String userId) {
+        final String API_KEY = "AAAAOwyZe_A:APA91bH2sWXmIU6uQJGwQ51bsu53CrZ1D7h7znkxf0jKFgYWBqzmwu5a0PoQmKcp9UxmWEjvSFBpVaf11hMp-y6auZvv3DB5Jb2tBkWQ7EgoUWok2bPUjV1A7tFtBnjkPXUq1HFPo8i-";
+
+        JSONObject notification = new JSONObject();
+        JSONObject notificationBody = new JSONObject();
+        try {
+            notificationBody.put("title", title);
+            notificationBody.put("body", body);
+            Log.d("TAG2", token);
+            notification.put("to", token);
+            notification.put("notification", notificationBody);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "https://fcm.googleapis.com/fcm/send",
+                    notification,
+                    response -> {
+                        guardarNotificacionEnFirebase(title, body, userId);
+                    },
+                    error -> {
+                        Log.e("TAG", "Error al enviar notificación: " + error.getMessage());
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Authorization", "Bearer " + API_KEY);
+                    return headers;
+                }
+            };
+
+            Volley.newRequestQueue(this).add(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void guardarNotificacionEnFirebase(String title, String body, String administratorId){
+
+        Map<String, Object> notificacion = new HashMap<>();
+        notificacion.put("titulo", title);
+        notificacion.put("descripcion", body);
+        notificacion.put("fechaCreacion", Timestamp.now());
+        notificacion.put("categoria", "Tareas");
+
+        db.collection("users")
+                .document(administratorId)
+                .collection("notificaciones")
+                .add(notificacion)
+                .addOnSuccessListener(command -> {
+                    Log.d("Firestore", "Se ha guardado con exito");
+                })
+                .addOnFailureListener(command -> {
+                    Log.d("Firestore", "No se ha guardado con exito");
+                });
+
+    }
+
+
 }

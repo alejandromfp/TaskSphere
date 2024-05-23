@@ -187,6 +187,7 @@ public class HomeFragment extends Fragment {
         userRole.setText(usuario.getRol());
         usernameFichar.setText(usuario.getNombre());
         updateItemFichar();
+        setFicharItem();
     }
 
     private void guardarTokenUsuario() {
@@ -300,13 +301,11 @@ public class HomeFragment extends Fragment {
                             }
                         }else{
                             fichar.setVisibility(View.VISIBLE);
-                            ficharTag.setVisibility(View.VISIBLE);
-                            buttonPlay.setVisibility(View.VISIBLE);
                             buttonPause.setVisibility(View.GONE);
                             timer.setVisibility(View.GONE);
-
                             buttonPlay.setOnClickListener(v -> {
                                 empezarFichaje();
+                                setFicharItem();
                             });
                         }
                 });

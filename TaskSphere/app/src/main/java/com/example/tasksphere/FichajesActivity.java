@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,10 +37,11 @@ import java.util.Locale;
 
 public class FichajesActivity extends AppCompatActivity {
 
-    TextView empleado, diaSeleccionado, horasTotales;
+    TextView empleado, diaSeleccionado, horasTotales , empleadoTag;
     Spinner spinner;
     FirebaseFirestore db;
 
+    Button backbutton;
     long sumaHoras;
 
     FichajesAdapter adapter;
@@ -86,23 +88,20 @@ public class FichajesActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         empleado = findViewById(R.id.empleado);
+
         diaSeleccionado = findViewById(R.id.selectday);
         horasTotales = findViewById(R.id.horas_totales_dia);
         spinner = findViewById(R.id.spinner);
         fichajesRecycler = findViewById(R.id.recyclerFichajes);
         calendarView = findViewById(R.id.calendar);
+        empleadoTag = findViewById(R.id.empleado_text);
         calendar = Calendar.getInstance();
         adapter = new FichajesAdapter(this, fichajesDia);
         fichajesRecycler.setAdapter(adapter);
         fichajesRecycler.setLayoutManager(new LinearLayoutManager(this));
+        backbutton = findViewById(R.id.backbutton);
+        backbutton.setOnClickListener(v -> onBackPressed());
 
-        if(usuario.getRol().equals("Administrador")){
-            getEmpleados(spinner);
-        }
-        else{
-            //TODO RESETEAR SPINNER
-
-        }
     }
 
     public void setItems(){
@@ -112,6 +111,18 @@ public class FichajesActivity extends AppCompatActivity {
         calendarView.setDate(today, true, true);
         diaSeleccionado.setText(sdf.format(calendar.getTime()));
         fechaSeleccionada = sdf.format(calendar.getTime());
+
+
+        if(usuario.getRol().equals("Administrador")  || usuario.getRol().equals("Gerente")){
+            getEmpleados(spinner);
+            spinner.setVisibility(View.VISIBLE);
+            empleadoTag.setVisibility(View.VISIBLE);
+        }
+        else{
+            getFichajes(usuario.getUserId());
+
+        }
+
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             calendar.set(year,month,dayOfMonth);
@@ -124,7 +135,9 @@ public class FichajesActivity extends AppCompatActivity {
                 spinner.setSelection(0);
             }
             else{
-
+                fichajesDia.clear();
+                adapter.notifyDataSetChanged();
+                getFichajes(usuario.getUserId());
 
             }
 

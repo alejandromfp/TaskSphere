@@ -1,5 +1,6 @@
 package com.example.tasksphere;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
@@ -39,8 +40,8 @@ public class MainActivity2 extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         setupNavigation();
-
-
+        obtenerDatosDeUsuario();
+        comprobarRol();
     }
 
 
@@ -51,6 +52,28 @@ public class MainActivity2 extends AppCompatActivity {
                 bottomNavigationView,
                 navHostFragment.getNavController()
         );
+    }
+
+    private void obtenerDatosDeUsuario(){
+        sharedPreferences = this.getSharedPreferences("usuario", Context.MODE_PRIVATE);
+        String userJson = sharedPreferences.getString("userJson", "uwu");
+        Log.d("JSON", userJson);
+        if(userJson != null) {
+            Gson gson = new Gson();
+            usuario = gson.fromJson(userJson, User.class);
+
+        }
+    }
+
+    private void comprobarRol(){
+
+        if(usuario.getRol().isEmpty() || usuario.getRol() == null || usuario.getRol().equals("Sin asignar")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Lo sentimos, no tienes permisos para acceder a la aplicación, Un administrador queda a la espera de asignarte un rol");
+            builder.setCancelable(false);
+            builder.show();
+        }
+
     }
 
 
