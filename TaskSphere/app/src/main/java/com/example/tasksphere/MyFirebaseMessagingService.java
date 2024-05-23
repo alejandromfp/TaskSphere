@@ -37,25 +37,53 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void mostrarNotificacion(String title, String body) {
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(this.NOTIFICATION_SERVICE);
+        // Obtener el servicio de notificación
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
+        // Crear el canal de notificación (solo necesario en Android 8.0 y superior)
+        createNotificationChannel();
+
+        // Intent para abrir la actividad principal al hacer clic en la notificación
         Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Construir y mostrar la notificación
 
         android.app.Notification.Style style = new android.app.Notification.BigTextStyle().bigText(body);
-        Notification.Builder builder = new Notification.Builder(this, "channel_id")
-                .setSmallIcon(android.R.drawable.ic_dialog_info) //CAMBIAR AQUI POR EL ICONO DE LA APP
-                .setContentTitle(title)
-                .setContentText(body)
-                .setStyle(style)
-                .setWhen(System.currentTimeMillis())
+        // PendingIntent para abrir la actividad principal
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        // Construir la notificación
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setSmallIcon(android.R.drawable.ic_dialog_info) // Icono de notificación
+                .setContentTitle(title) // Título de la notificación
+                .setContentText(body) // Contenido de la notificación
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
         // Mostrar la notificación
         notificationManager.notify(23232, builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Verificar si el dispositivo está en Android 8.0 (Oreo) o superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Crear el canal de notificación
+            CharSequence name = "Nombre del canal";
+            String description = "Descripción del canal";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("channel_id", name, importance);
+            channel.setDescription(description);
+
+            // Registrar el canal en el sistema
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }

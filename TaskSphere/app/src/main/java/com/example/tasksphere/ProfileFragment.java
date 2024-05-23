@@ -247,10 +247,6 @@ public class ProfileFragment extends Fragment {
                     .into(profileImageView);
 
         }
-        if (usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")){
-            editUser.setVisibility(View.VISIBLE);
-        }else
-            editUser.setVisibility(View.GONE);
     }
     private void actualizarDatos(){
         db.collection("users")

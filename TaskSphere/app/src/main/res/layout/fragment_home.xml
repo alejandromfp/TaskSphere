@@ -65,6 +65,31 @@
             </RelativeLayout>
 
 
+
+            <Button
+                android:id="@+id/backbutton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="100dp"
+                android:background="@drawable/button_ripple"
+                android:drawableLeft="@drawable/bell"
+                android:paddingLeft="7.5dp"
+                app:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cardView" />
+            <Button
+                android:id="@+id/logOutButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/button_ripple"
+                android:drawableLeft="@drawable/exit"
+                android:paddingLeft="5.5dp"
+                app:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cardView" />
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
@@ -107,9 +132,13 @@
 
                 android:padding="10dp"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="80dp"
+
+                app:cardElevation="5dp"
+
                 app:layout_constraintBottom_toTopOf="@+id/recyclerContainer"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:outlineSpotShadowColor="@color/azulMasOscuro"
+                android:outlineAmbientShadowColor="@color/white"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

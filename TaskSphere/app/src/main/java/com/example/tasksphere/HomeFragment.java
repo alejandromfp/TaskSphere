@@ -76,6 +76,10 @@ public class HomeFragment extends Fragment {
 
     View fichar;
 
+    Button logOut;
+
+
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -123,6 +127,7 @@ public class HomeFragment extends Fragment {
             requireActivity().startActivity(intent);
         });
 
+
         fichajesItem = rootView.findViewById(R.id.item_fichajes_horarios);
         fichajesItem.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), FichajesActivity.class);
@@ -166,6 +171,27 @@ public class HomeFragment extends Fragment {
             }
         };
 
+        Button logOutButton = rootView.findViewById(R.id.logOutButton);
+        logOutButton.setOnClickListener(v -> {
+            logOut();
+        });
+    }
+    private void logOut() {
+        mAuth.signOut();
+        clearUserData();
+
+        // Redirigir a la pantalla de inicio de sesión
+        Intent intent = new Intent(requireContext(), Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Evitar que el usuario vuelva a la pantalla anterior utilizando el botno de retroceso
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
+    private void clearUserData() {
+        // Limpiar los datos de SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     private void obtenerDatosDeUsuario(){
@@ -427,4 +453,5 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
         detenerContador();
     }
+
 }
