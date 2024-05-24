@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +31,9 @@ import com.google.gson.Gson;
 public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    EditText emailText, passText;
+    private EditText emailText, passText;
+
+    private CheckBox checkBoxShowPassword;
     String token;
 
     Button botonLogin;
@@ -87,6 +92,20 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
         });
+
+        passText = findViewById(R.id.cajaPass);
+        checkBoxShowPassword = findViewById(R.id.checkBoxLogin);
+
+        checkBoxShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Mostrar la contraseña
+                passText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                // Ocultar la contraseña
+                passText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
+
     }
 
     private void obtainUserFromDatabase() {

@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private final String API_KEY = "YOUR_API_KEY_HERE";
-    EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
-    TextView botonRegistro;
+    private EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
+    private TextView botonRegistro;
+
+    private CheckBox checkBoxShowPassword;
     private FirebaseFirestore db;
 
     @Override
@@ -137,6 +142,20 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+        passText = findViewById(R.id.cajaPassword);
+        checkBoxShowPassword = findViewById(R.id.checkBoxRegistry);
+
+        checkBoxShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Mostrar la contraseña
+                passText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                // Ocultar la contraseña
+                passText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
+        });
+
     }
 
     private void enviarNotificacion(String token, String title, String body, String administratorId) {
