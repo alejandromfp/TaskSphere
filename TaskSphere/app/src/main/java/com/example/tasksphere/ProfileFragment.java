@@ -329,12 +329,12 @@ public class ProfileFragment extends Fragment {
             EditText fechaNac, EditText direccion,
             EditText localidad, EditText biografia){
         Map<String, Object> userData = new HashMap<>();
-        userData.put("nombre", name.getText().toString());
-        userData.put("apellidos", apellidos.getText().toString());
-        userData.put("direccion", direccion.getText().toString());
-        userData.put("ciudad", localidad.getText().toString());
-        userData.put("fechaNacimiento", fechaNac.getText().toString());
-        userData.put("biografia", biografia.getText().toString());
+        userData.put("nombre", name.getText().toString().trim());
+        userData.put("apellidos", apellidos.getText().toString().trim());
+        userData.put("direccion", direccion.getText().toString().trim());
+        userData.put("ciudad", localidad.getText().toString().trim());
+        userData.put("fechaNacimiento", fechaNac.getText().toString().trim());
+        userData.put("biografia", biografia.getText().toString().trim());
 
 
 

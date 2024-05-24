@@ -32,13 +32,13 @@ import java.util.Locale;
 
 public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.ComunicadoViewHolder> {
     private List<Comunicado> comunicadosList;
-    private String userId;
+    private User user;
     private Context context;
     private FirebaseFirestore db;
 
-    public ComunicadosAdapter(Context context, List<Comunicado> comunicadosList, String userId) {
+    public ComunicadosAdapter(Context context, List<Comunicado> comunicadosList, User user) {
         this.context = context;
-        this.userId = userId;
+        this.user = user;
         this.comunicadosList = comunicadosList;
         this.db = FirebaseFirestore.getInstance();
     }
@@ -58,7 +58,7 @@ public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.
         holder.fechaCreacion.setText(obtenerFechaEnString(comunicado.getDateCreation()));
         obtenerDatosUserComunicado(holder.profileImg, holder.username, comunicado.getUser());
 
-        if(this.userId.equals(comunicado.getUser()) && !comunicado.getUser().isEmpty()){
+        if(this.user.getUserId().equals(comunicado.getUser()) && !comunicado.getUser().isEmpty() || user.getRol().equals("Administrador")){
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
         }else{

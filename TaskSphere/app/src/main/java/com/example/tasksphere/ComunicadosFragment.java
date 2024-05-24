@@ -114,7 +114,7 @@ public class ComunicadosFragment extends Fragment {
         userRole = rootView.findViewById(R.id.userRole);
 
         recyclerViewComunicados = rootView.findViewById(R.id.recyclerViewComunicados);
-        comunicadosAdapter = new ComunicadosAdapter(requireContext(), comunicadosList, usuario.getUserId());
+        comunicadosAdapter = new ComunicadosAdapter(requireContext(), comunicadosList, usuario);
         recyclerViewComunicados.setAdapter(comunicadosAdapter);
         recyclerViewComunicados.setLayoutManager(new LinearLayoutManager(requireContext()));
 

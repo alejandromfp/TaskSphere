@@ -10,42 +10,65 @@
     android:elevation="4dp"
     android:padding="16dp">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:elevation="1dp"
+        android:padding="10dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/profileImg"
+            android:layout_width="wrap_content"
+            android:layout_height="53dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="TODO"
+            android:cropToPadding="true"
+            android:elevation="5dp"
+            android:src="@drawable/defaultavatar" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginStart="12dp"
         android:layout_weight="1"
+
         android:fontFamily="@font/poppins_regular"
         android:gravity="center_vertical"
 
         android:text="Category"
         android:textColor="@color/azulOscuro"
-
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/fichajetitle"
-        android:layout_width="300dp"
-        android:layout_height="23dp"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
 
         android:layout_marginBottom="4dp"
-        android:layout_weight="1"
 
+        android:layout_weight="1"
         android:fontFamily="@font/poppins_semibold"
         android:gravity="center_vertical"
-        android:text="Task Title"
+        android:text="Task Ti"
         android:textColor="@color/azulMasOscuro"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/action_button"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/category"
         app:layout_constraintTop_toBottomOf="@+id/category"
         app:layout_constraintVertical_bias="0.0" />
 

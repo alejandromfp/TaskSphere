@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.tasksphere.model.Comunicado;
 import com.example.tasksphere.modelo.entidad.Fichaje;
 import com.example.tasksphere.modelo.entidad.Task;
 import com.example.tasksphere.modelo.entidad.User;
@@ -43,8 +44,11 @@ import com.google.gson.Gson;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
@@ -57,6 +61,8 @@ public class HomeFragment extends Fragment {
     SharedPreferences sharedPreferences;
     User usuario;
 
+    Comunicado lastComunicado;
+    List<Comunicado> comunicadoList = new ArrayList<>();
     String token;
 
     Button notificationsButton, buttonPlay, buttonPause;
@@ -70,11 +76,12 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
     ImageView profileImg;
 
+
     Handler handler;
     Runnable timerRunnable ;
     TextView username,userRole, notificationCount, timer, usernameFichar,ficharTag ;
 
-    View fichar;
+    View fichar, lastComunicadoView;
 
     Button logOut;
 
@@ -119,6 +126,7 @@ public class HomeFragment extends Fragment {
             navController.popBackStack();
             navController.navigate(R.id.profile_page);
         });
+
         username = rootView.findViewById(R.id.username);
         userRole = rootView.findViewById(R.id.userRole);
         teamItem = rootView.findViewById(R.id.team_item);
@@ -126,7 +134,7 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(requireContext(), TeamActivity.class);
             requireActivity().startActivity(intent);
         });
-
+        lastComunicadoView = rootView.findViewById(R.id.last_comunicado);
 
         fichajesItem = rootView.findViewById(R.id.item_fichajes_horarios);
         fichajesItem.setOnClickListener(v -> {
@@ -158,6 +166,7 @@ public class HomeFragment extends Fragment {
         timer = fichar.findViewById(R.id.timer);
         ficharTag = fichar.findViewById(R.id.fichar_tag);
         handler = new Handler();
+        obtainLastComunicado();
         timerRunnable = new Runnable() {
             @Override
             public void run() {
@@ -424,7 +433,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void detenerContador() {
-        handler.removeCallbacks(timerRunnable); // Detiene el temporizador
+        handler.removeCallbacks(timerRunnable);
     }
 
     private String milisegundosAContador(long milisegundos) {
@@ -440,6 +449,75 @@ public class HomeFragment extends Fragment {
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", horas, minutos, segundos);
     }
 
+    public void obtainLastComunicado(){
+        db.collection("Comunicados")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    comunicadoList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Comunicado comunicado = new Comunicado(
+                                document.getId(),
+                                document.getString("id_usuario"),
+                                document.getString("titulo"),
+                                document.getString("descripcion"),
+                                document.getTimestamp("fecha_creacion").toDate()
+                        );
+                        comunicadoList.add(comunicado);
+                    }
+                    Collections.sort(comunicadoList, (t1, t2) -> t2.getDateCreation().compareTo(t1.getDateCreation()));
+                    lastComunicado = comunicadoList.get(0);
+                    setComunicado(lastComunicado);
+                })
+                .addOnFailureListener(e -> Toast.makeText(requireContext(), "Error al obtener los comunicados", Toast.LENGTH_SHORT).show());
+    }
+
+    public void setComunicado(Comunicado comunicado){
+
+        TextView title, description, fechaCreacion, username;
+
+        ImageView profileImg;
+
+        title = lastComunicadoView.findViewById(R.id.title_comunicado);
+        username = lastComunicadoView.findViewById(R.id.username_comunicado);
+        description = lastComunicadoView.findViewById(R.id.descripcion_comunicado);
+        profileImg = lastComunicadoView.findViewById(R.id.profileImg);
+        fechaCreacion = lastComunicadoView.findViewById(R.id.fechacreacion_comunicado);
+
+        title.setText(comunicado.getTitle());
+        description.setText(comunicado.getDescription());
+        fechaCreacion.setText(obtenerFechaEnString(comunicado.getDateCreation()));
+        obtenerDatosUserComunicado(profileImg, username, comunicado.getUser());
+
+    }
+
+
+    public void obtenerDatosUserComunicado(ImageView profileImg, TextView username, String userId){
+        User usuario  = new User();
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    usuario.setUserId(doc.getId());
+                    usuario.setNombre(doc.getString("nombre"));
+                    usuario.setProfileImage(doc.getString("profile_img_path"));
+                    Glide.with(requireContext())
+                            .load(usuario.getProfileImage())
+                            .centerCrop()
+                            .placeholder(R.drawable.defaultavatar)
+                            .into(profileImg);
+
+                    username.setText(usuario.getNombre());
+                });
+
+    }
+    private String obtenerFechaEnString(Date date){
+        String fecha = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+        fecha = formatter.format(date);
+        return fecha;
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -453,5 +531,7 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
         detenerContador();
     }
+
+
 
 }

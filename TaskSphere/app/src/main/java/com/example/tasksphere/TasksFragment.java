@@ -105,8 +105,8 @@ public class TasksFragment extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView  = inflater.inflate(R.layout.fragment_tasks, container, false);
-        getItems(rootView);
         obtenerDatosDeUsuario();
+        getItems(rootView);
         setDatosDeUsuario();
         actualizarTareas();
 
@@ -203,7 +203,7 @@ public class TasksFragment extends Fragment  {
 
         //TAREAS SIN ASIGNAR VIEW
         recTareasSinAsignar = rootView.findViewById(R.id.recyclerViewSinAsignar);
-        adapterSinAsignar = new TareasAdapter(requireContext(), tareasSinAsignar);
+        adapterSinAsignar = new TareasAdapter(requireContext(), tareasSinAsignar, usuario);
         recTareasSinAsignar.setAdapter(adapterSinAsignar);
         recTareasSinAsignar.setLayoutManager(new LinearLayoutManager(requireContext()));
         obtenerTareasSinAsignar();
@@ -211,7 +211,7 @@ public class TasksFragment extends Fragment  {
 
         //TAREAS PENDIENTES VIEW
         recTareasPendientes = rootView.findViewById(R.id.recyclerViewPendientes);
-        adapterPendientes = new TareasAdapter(requireContext(), tareasPendientes);
+        adapterPendientes = new TareasAdapter(requireContext(), tareasPendientes, usuario);
         recTareasPendientes.setAdapter(adapterPendientes);
         recTareasPendientes.setLayoutManager(new LinearLayoutManager(requireContext()));
         obtenerTareasPendientes();
@@ -219,7 +219,7 @@ public class TasksFragment extends Fragment  {
 
         //TAREAS TERMINADAS VIEW
         recTareasTerminadas = rootView.findViewById(R.id.recyclerViewTerminadas);
-        adapterTerminadas = new TareasAdapter(requireContext(), tareasTerminadas);
+        adapterTerminadas = new TareasAdapter(requireContext(), tareasTerminadas, usuario);
         recTareasTerminadas.setAdapter(adapterTerminadas);
         recTareasTerminadas.setLayoutManager(new LinearLayoutManager(requireContext()));
         obtenerTareasTerminadas();
@@ -402,6 +402,18 @@ public class TasksFragment extends Fragment  {
                 });
     }
 
+    private void obtenerTareas(){
+        if(usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")){
+            obtenerTodasTareasPendientes();
+            obtenerTareasSinAsignar();
+            obtenerTodasTareasTerminadas();
+        }else {
+            obtenerTareasPendientes();
+            obtenerTareasSinAsignar();
+            obtenerTareasTerminadas();
+        }
+    }
+
     private void obtenerTareasSinAsignar(){
         db.collection("tareas")
                 .whereEqualTo("asignadaA",null)
@@ -461,11 +473,72 @@ public class TasksFragment extends Fragment  {
 
                 });
     }
+
+    private void obtenerTodasTareasPendientes(){
+        Log.d("hola", mAuth.getCurrentUser().getUid());
+        db.collection("tareas")
+                .whereEqualTo("fechaFinalizacion",null)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    tareasPendientes.clear();
+                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                        Task tarea = new Task();
+                        tarea.setTaskId(doc.getId());
+                        tarea.setTaskName(doc.getString("nombreTarea"));
+                        tarea.setTaskDescription(doc.getString("descripcionTarea"));
+                        tarea.setFechaCreacion(doc.getTimestamp("fechaCreacion").toDate());
+                        tarea.setAsignadaA(doc.getString("asignadaA"));
+                        tarea.setFechaInicio(doc.getString("fechaInicio"));
+                        tarea.setFechaFinal(doc.getString("fechaFinalizacion"));
+                        Log.d("TAREAPENDIENTE", tarea.getTaskName());
+                        tareasPendientes.add(tarea);
+                    }
+
+                    if(tareasPendientes.size()>0){
+                        Collections.sort(tareasPendientes, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
+                        adapterPendientes.notifyDataSetChanged();
+                        pendientesContainer.setVisibility(View.VISIBLE);
+                    }else
+                        pendientesContainer.setVisibility(View.GONE);
+
+                });
+    }
     private void obtenerTareasTerminadas(){
         Log.d("MYID", mAuth.getCurrentUser().getUid());
         db.collection("tareas")
                 .whereNotEqualTo("fechaFinalizacion",null)
                 .whereEqualTo("asignadaA", mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    tareasTerminadas.clear();
+                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                        Task tarea = new Task();
+                        tarea.setTaskId(doc.getId());
+                        tarea.setTaskName(doc.getString("nombreTarea"));
+                        tarea.setTaskDescription(doc.getString("descripcionTarea"));
+                        tarea.setAsignadaA(doc.getString("asignadaA"));
+                        tarea.setFechaCreacion(doc.getTimestamp("fechaCreacion").toDate());
+                        tarea.setFechaInicio(doc.getString("fechaInicio"));
+                        tarea.setFechaFinal(doc.getString("fechaFinalizacion"));
+                        Log.d("TAREASTERMINADA", tarea.getTaskName());
+                        tareasTerminadas.add(tarea);
+
+                    }
+                    if(tareasTerminadas.size()>0){
+                        Collections.sort(tareasTerminadas, (t1, t2) -> t2.getFechaCreacion().compareTo(t1.getFechaCreacion()));
+                        adapterTerminadas.notifyDataSetChanged();
+                        finalizadasContainer.setVisibility(View.VISIBLE);
+                    }else
+                        finalizadasContainer.setVisibility(View.GONE);
+
+
+                });
+    }
+
+    private void obtenerTodasTareasTerminadas(){
+        Log.d("MYID", mAuth.getCurrentUser().getUid());
+        db.collection("tareas")
+                .whereNotEqualTo("fechaFinalizacion",null)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     tareasTerminadas.clear();
@@ -499,14 +572,8 @@ public class TasksFragment extends Fragment  {
                     if (error != null) {
                         return;
                     }
+                    obtenerTareas();
 
-                    obtenerTareasPendientes();
-                    obtenerTareasSinAsignar();
-                    obtenerTareasTerminadas();
-
-                    adapterTerminadas.notifyDataSetChanged();
-                    adapterPendientes.notifyDataSetChanged();
-                    adapterSinAsignar.notifyDataSetChanged();
                 });
     }
 
@@ -529,10 +596,11 @@ public class TasksFragment extends Fragment  {
     @Override
     public void onResume() {
         super.onResume();
-        obtenerTareasTerminadas();
-        obtenerTareasPendientes();
-        obtenerTareasSinAsignar();
+        setDefaultButtonStyles(listaBotones);
+        obtenerTareas();
     }
+
+
 
     private void enviarNotificacion(String token, String title, String body, String userId) {
         final String API_KEY = "AAAAOwyZe_A:APA91bH2sWXmIU6uQJGwQ51bsu53CrZ1D7h7znkxf0jKFgYWBqzmwu5a0PoQmKcp9UxmWEjvSFBpVaf11hMp-y6auZvv3DB5Jb2tBkWQ7EgoUWok2bPUjV1A7tFtBnjkPXUq1HFPo8i-";

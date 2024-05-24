@@ -162,7 +162,9 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <include layout="@layout/item_comunicados"/>
+                <include
+                    android:id="@+id/last_comunicado"
+                    layout="@layout/item_comunicados"/>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/item_fichajes_horarios"
                     android:layout_width="match_parent"

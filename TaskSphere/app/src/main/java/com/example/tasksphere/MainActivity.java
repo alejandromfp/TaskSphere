@@ -64,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
         botonRegistro.setOnClickListener(v -> {
             //CREAR USUARIO EN FIREBASE
 
-            String email = emailText.getText().toString();
-            String password = passText.getText().toString();
-            String nombre = nombreText.getText().toString();
-            String apellidos = apellidosText.getText().toString();
-            String direccion = direccionText.getText().toString();
-            String ciudad = ciudadText.getText().toString();
-            String telefono = telefonoText.getText().toString();
-            String fechaNacimiento = fechaNacimientoText.getText().toString();
-            String dni = dniText.getText().toString();
+            String email = emailText.getText().toString().trim();
+            String password = passText.getText().toString().trim();
+            String nombre = nombreText.getText().toString().trim();
+            String apellidos = apellidosText.getText().toString().trim();
+            String direccion = direccionText.getText().toString().trim();
+            String ciudad = ciudadText.getText().toString().trim();
+            String telefono = telefonoText.getText().toString().trim();
+            String fechaNacimiento = fechaNacimientoText.getText().toString().trim();
+            String dni = dniText.getText().toString().trim();
 
             // Validación de campos vacíos y formatos correctos
             if (nombre.isEmpty()) {
