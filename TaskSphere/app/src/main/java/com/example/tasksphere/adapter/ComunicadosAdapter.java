@@ -83,6 +83,7 @@ public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.
         TextInputEditText editTitulo = dialog.findViewById(R.id.titleinput);
         TextInputEditText editDescripcion = dialog.findViewById(R.id.descripcioninput);
         Button editButton = dialog.findViewById(R.id.saveButton);
+        Button cancelButton = dialog.findViewById(R.id.cancelButton);
 
         editTitulo.setText(comunicado.getTitle());
         editDescripcion.setText(comunicado.getDescription());
@@ -97,6 +98,11 @@ public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.
             } else {
                 Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        cancelButton.setOnClickListener(v1 -> {
+            // Cerrar el diálogo cuando se presiona el botón Cancelar
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -129,43 +135,6 @@ public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.
     @Override
     public int getItemCount() {
         return comunicadosList.size();
-    }
-
-    public void cargarComunicadoPorUsuario (String userId) {
-        db.collection("Comunicados")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        comunicadosList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Comunicado comunicado = document.toObject(Comunicado.class);
-                            comunicado.setUser(document.getId());
-                            comunicadosList.add(comunicado);
-                        }
-                        notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(context, "Error al cargar el comunicado", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    public void cargarComunicadoPorFecha(long timestamp) {
-        db.collection("Comunicados")
-                .whereGreaterThanOrEqualTo("timestamp", timestamp)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        comunicadosList.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Comunicado comunicado = document.toObject(Comunicado.class);
-                            comunicadosList.add(comunicado);
-                        }
-                        notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(context, "No se ha encontrado ningún comunicado con esa fecha", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     public static class ComunicadoViewHolder extends RecyclerView.ViewHolder {
