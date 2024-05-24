@@ -1,7 +1,6 @@
 package com.example.tasksphere;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -25,17 +25,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.text.DateFormatSymbols;
 import java.util.Map;
 
-public class  CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity {
 
-    TextView fecha;
+    TextView fecha, vacacionesTextView;
     private FirebaseAuth mAuth;
-
+    private FirebaseFirestore db;
     private Calendar fechaSeleccionada = Calendar.getInstance();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,7 @@ public class  CalendarActivity extends AppCompatActivity {
         // Inicializa Firebase
         FirebaseApp.initializeApp(this);
         // Configura Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,6 +55,8 @@ public class  CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         fecha = findViewById(R.id.fecha);
+        vacacionesTextView = findViewById(R.id.diasVacaciones); // Inicializar vacacionesTextView
+
         actualizarFechaTexto(new Date()); // Actualizar la fecha al iniciar
 
         Button botonVacaciones = findViewById(R.id.botonVacaciones);
@@ -68,8 +67,11 @@ public class  CalendarActivity extends AppCompatActivity {
             }
         });
 
-
-
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            getUserVacaciones(userId);
+        }
     }
 
     private void enviarSolicitudVacaciones() {
@@ -103,7 +105,6 @@ public class  CalendarActivity extends AppCompatActivity {
                 });
     }
 
-
     private void enviarNuevaSolicitud(FirebaseFirestore db, String userId, String fechaVacaciones) {
         Map<String, Object> userData = new HashMap<>();
         userData.put("usuario", userId);
@@ -122,8 +123,7 @@ public class  CalendarActivity extends AppCompatActivity {
                 });
     }
 
-
-    public void abrirCalendario(View view){
+    public void abrirCalendario(View view) {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         int anio = cal.get(Calendar.YEAR);
@@ -167,6 +167,23 @@ public class  CalendarActivity extends AppCompatActivity {
         }
     }
 
-
+    private void getUserVacaciones(String userId) {
+        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Long vacaciones = document.getLong("vacaciones");
+                    if (vacaciones != null) {
+                        vacacionesTextView.setText(String.valueOf(vacaciones));
+                    } else {
+                        vacacionesTextView.setText("Vacaciones no disponibles");
+                    }
+                } else {
+                    vacacionesTextView.setText("Documento no encontrado");
+                }
+            } else {
+                vacacionesTextView.setText("Error al obtener los datos");
+            }
+        });
+    }
 }
-

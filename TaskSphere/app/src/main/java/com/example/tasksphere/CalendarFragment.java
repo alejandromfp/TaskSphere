@@ -2,6 +2,7 @@ package com.example.tasksphere;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.tasksphere.modelo.entidad.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
@@ -34,27 +36,25 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
 public class CalendarFragment extends Fragment {
 
-    TextView fecha;
-    Button seleccionarFecha, botonVacaciones;
+    TextView fecha, diasVacaciones;
+    Button seleccionarFecha, botonVacaciones, botonGestionVacaciones;
 
     private Calendar fechaSeleccionada = Calendar.getInstance();
-
 
     FirebaseAuth mAuth;
 
     SharedPreferences sharedPreferences;
     User usuario;
 
-
     FirebaseFirestore db;
     ImageView profileImg;
+
     TextView username, userRole;
+    TextView horaEntrada, horaSalida, totalHoras;
 
     public CalendarFragment() {
-
     }
 
     public static CalendarFragment newInstance(String param1, String param2) {
@@ -67,31 +67,29 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView  = inflater.inflate(R.layout.fragment_calendar, container, false);
-        // Cambiar la localización de la app a español
+        View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
         Locale locale = new Locale("es", "ES");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
-        //Usar el rootview en los fragment, para hacer el findviewbyid!!!!!!
         getItems(rootView);
         obtenerDatosDeUsuario();
         setDatosDeUsuario();
+        obtenerVacaciones();
 
-        actualizarFechaTexto(new Date()); // Actualizar la fecha al iniciar
+        actualizarFechaTexto(fechaSeleccionada.getTime());
 
         return rootView;
     }
 
-    public void abrirCalendario(View view){
+    public void abrirCalendario(View view) {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         int anio = cal.get(Calendar.YEAR);
@@ -101,15 +99,12 @@ public class CalendarFragment extends Fragment {
         DatePickerDialog dpd = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar fechaSeleccionada = Calendar.getInstance();
                 fechaSeleccionada.set(year, month, dayOfMonth);
                 actualizarFechaTexto(fechaSeleccionada.getTime());
             }
         }, anio, mes, dia);
 
         dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
-
-        //arreglar calendar background ... dpd.getWindow()... TODO
         dpd.show();
     }
 
@@ -146,12 +141,18 @@ public class CalendarFragment extends Fragment {
             return;
         }
 
+        // Verificar si la fecha seleccionada es anterior a la fecha actual
+        Calendar hoy = Calendar.getInstance();
+        if (fechaSeleccionada.before(hoy)) {
+            Toast.makeText(requireContext(), "No se pueden pedir días de vacaciones pasados", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String fechaVacaciones = sdf.format(fechaSeleccionada.getTime());
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Comprobar si existe una solicitud similar
         db.collection("solicitudes")
                 .whereEqualTo("usuario", user.getUid())
                 .whereEqualTo("fecha", fechaVacaciones)
@@ -168,7 +169,6 @@ public class CalendarFragment extends Fragment {
                     Toast.makeText(requireContext(), "Error al verificar solicitudes existentes", Toast.LENGTH_SHORT).show();
                 });
     }
-
 
     private void enviarNuevaSolicitud(FirebaseFirestore db, String userId, String fechaVacaciones) {
         Map<String, Object> userData = new HashMap<>();
@@ -188,36 +188,93 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
-    private void obtenerDatosDeUsuario(){
+    private void obtenerDatosDeUsuario() {
         sharedPreferences = requireContext().getSharedPreferences("usuario", Context.MODE_PRIVATE);
         String userJson = sharedPreferences.getString("userJson", "uwu");
         Log.d("JSON", userJson);
-        if(userJson != null){
+        if (userJson != null) {
             Gson gson = new Gson();
             usuario = gson.fromJson(userJson, User.class);
         }
-
     }
-    private void setDatosDeUsuario(){
+
+    private void setDatosDeUsuario() {
         username.setText(usuario.getNombre());
         Glide.with(requireContext())
                 .load(usuario.getProfileImage())
                 .placeholder(R.drawable.defaultavatar)
                 .into(profileImg);
         userRole.setText(usuario.getRol());
+
+        verificarRolUsuario();
+
     }
 
+    private void verificarRolUsuario() {
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
-    public void getItems(View rootView){
+        if (user == null) {
+            return;
+        }
+
+        db.collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String rol = documentSnapshot.getString("rol");
+                        if ("Administrador".equals(rol)) {
+                            botonGestionVacaciones.setVisibility(View.VISIBLE);
+                            botonGestionVacaciones.setEnabled(true);
+                        } else {
+                            botonGestionVacaciones.setVisibility(View.GONE);
+                            botonGestionVacaciones.setEnabled(false);
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Error al verificar el rol del usuario", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void abrirGestionVacacionesActivity() {
+        Intent intent = new Intent(getActivity(), ApprovalsActivity.class);
+        startActivity(intent);
+    }
+
+    private void obtenerVacaciones() {
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
+        db.collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Long vacaciones = documentSnapshot.getLong("vacaciones");
+                        if (vacaciones != null) {
+                            diasVacaciones.setText(String.valueOf(vacaciones));
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Error al obtener los días de vacaciones", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void getItems(View rootView) {
         fecha = rootView.findViewById(R.id.fecha);
         botonVacaciones = rootView.findViewById(R.id.botonVacaciones);
-        botonVacaciones.setOnClickListener(v -> {
-            enviarSolicitudVacaciones();
-        });
+        botonVacaciones.setOnClickListener(v -> enviarSolicitudVacaciones());
         seleccionarFecha = rootView.findViewById(R.id.botonCambiarFecha);
-        seleccionarFecha.setOnClickListener(v -> {
-            abrirCalendario(seleccionarFecha);
-        });
+        seleccionarFecha.setOnClickListener(v -> abrirCalendario(seleccionarFecha));
 
         username = rootView.findViewById(R.id.username);
         userRole = rootView.findViewById(R.id.userRole);
@@ -228,7 +285,13 @@ public class CalendarFragment extends Fragment {
             navController.navigate(R.id.profile_page);
         });
 
+        botonGestionVacaciones = rootView.findViewById(R.id.botonGestionVacaciones);
+        botonGestionVacaciones.setOnClickListener(v -> abrirGestionVacacionesActivity());
 
+        // Inicialmente, ocultar el botón de gestión de vacaciones
+        botonGestionVacaciones.setVisibility(View.GONE);
+        botonGestionVacaciones.setEnabled(false);
+
+        diasVacaciones = rootView.findViewById(R.id.diasVacaciones);
     }
-
 }

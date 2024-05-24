@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.Query;
 
-
 import com.example.tasksphere.adapter.SolicitudAdapter;
 import com.example.tasksphere.model.Solicitud;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -37,8 +36,13 @@ public class ApprovalsActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mRecycler = findViewById(R.id.listadoApprovalsPendientes);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
-        Query query = db.collection("solicitudes");
-        FirestoreRecyclerOptions<Solicitud> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Solicitud>().setQuery(query, Solicitud.class).build();
+
+        // Filtrar las solicitudes cuyo estado sea "pendiente"
+        Query query = db.collection("solicitudes").whereEqualTo("estado", "pendiente");
+
+        FirestoreRecyclerOptions<Solicitud> firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<Solicitud>()
+                .setQuery(query, Solicitud.class)
+                .build();
 
         mAdapter = new SolicitudAdapter(firestoreRecyclerOptions, this);
         mAdapter.notifyDataSetChanged();

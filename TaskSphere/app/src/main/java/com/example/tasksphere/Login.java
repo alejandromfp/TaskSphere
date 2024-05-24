@@ -38,7 +38,6 @@ public class Login extends AppCompatActivity {
 
     User usuario;
 
-
     FirebaseFirestore db;
 
     @Override
@@ -52,10 +51,8 @@ public class Login extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-
             obtainUserFromDatabase();
         }
-
 
         emailText = findViewById(R.id.cajaCorreo);
         passText = findViewById(R.id.cajaPass);
@@ -63,129 +60,86 @@ public class Login extends AppCompatActivity {
         botonLogin = findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(v -> {
             //LOGIN EN FIREBASE
-
             String email = emailText.getText().toString();
             String password = passText.getText().toString();
 
-            if (email.isEmpty()){
+            if (email.isEmpty()) {
                 emailText.setError("Campo obligatorio");
-            }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 emailText.setError("Email incorrecto");
-            }else if(password.length() < 6){
+            } else if (password.length() < 6) {
                 passText.setError("La contraseña debe tener al menos 6 caracteres");
-            }else{
+            } else {
                 mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    obtainUserFromDatabase();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Login.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
-                                }
+                        .addOnCompleteListener(this, task -> {
+                            if (task.isSuccessful()) {
+                                obtainUserFromDatabase();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         });
             }
         });
 
-        botonRegistro = findViewById(R.id.crearCuenta);
-        botonRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Login.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-        /*
         botonRegistro = findViewById(R.id.crearCuenta);
         botonRegistro.setOnClickListener(v -> {
-            //CREAR USUARIO EN FIREBASE
-
-            String email = emailText.getText().toString();
-            String password = passText.getText().toString();
-
-            if (email.isEmpty()){
-                emailText.setError("Campo obligatorio");
-            }else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                emailText.setError("Email incorrecto");
-            }else if(password.length() < 6){
-                passText.setError("La contraseña debe tener al menos 6 caracteres");
-            }else{
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(Login.this, "Usuario registrado", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Login.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
         });
-
-         */
-/*
-        @Override
-        public void onStart() {
-            super.onStart();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if(currentUser != null){
-                reload();
-            }
-        }
-*/
-
-
-
     }
 
-    private void obtainUserFromDatabase(){
-
+    private void obtainUserFromDatabase() {
         usuario = new User();
-        db.collection("users").document(mAuth.getCurrentUser().getUid()).get()
-                .addOnCompleteListener(task -> {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            db.collection("users").document(currentUser.getUid()).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            if (doc.exists()) {
+                                usuario.setUserId(doc.getId());
+                                usuario.setNombre(doc.getString("nombre"));
+                                usuario.setApellidos(doc.getString("apellidos"));
+                                usuario.setDireccion(doc.getString("direccion"));
+                                usuario.setDni(doc.getString("dni"));
+                                usuario.setLocalidad(doc.getString("ciudad"));
+                                usuario.setEmail(currentUser.getEmail());
+                                usuario.setRol(doc.getString("rol"));
+                                usuario.setFechaNac(doc.getString("fechaNacimiento"));
+                                usuario.setTelefono(doc.getString("telefono"));
+                                usuario.setBiografia(doc.getString("biografia"));
+                                usuario.setProfileImage(doc.getString("profile_img_path"));
+                                usuario.setUserToken(doc.getString("token"));
 
-                    if(task.isSuccessful()){
+                                // Manejo del campo vacaciones
+                                Long vacaciones = doc.getLong("vacaciones");
+                                if (vacaciones != null) {
+                                    usuario.setVacaciones(vacaciones.intValue());
+                                } else {
+                                    usuario.setVacaciones(30); // Valor predeterminado
+                                }
 
-                        DocumentSnapshot doc = task.getResult();
-
-                        if(doc.exists()){
-                            usuario.setUserId(doc.getId());
-                            usuario.setNombre(doc.getString("nombre"));
-                            usuario.setApellidos(doc.getString("apellidos"));
-                            usuario.setDireccion(doc.getString("direccion"));
-                            usuario.setDni(doc.getString("dni"));
-                            usuario.setLocalidad(doc.getString("ciudad"));
-                            usuario.setEmail(mAuth.getCurrentUser().getEmail());
-                            usuario.setRol(doc.getString("rol"));
-                            usuario.setFechaNac(doc.getString("fechaNacimiento"));
-                            usuario.setTelefono(doc.getString("telefono"));
-                            usuario.setBiografia(doc.getString("biografia"));
-                            usuario.setProfileImage(doc.getString("profile_img_path"));
-                            usuario.setUserToken(doc.getString("token"));
-                            Log.d("SISISIISISISI", usuario.getDni());
-                            setDatosUsuario();
-                        }else
-                            Log.d("NONONO", "no funciona");
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(Login.this, "No se han podido obtener los datos de usuario", Toast.LENGTH_SHORT).show();
-                });
-
+                                setDatosUsuario();
+                            } else {
+                                Log.d("Firestore", "No existe el documento para el usuario");
+                            }
+                        } else {
+                            Log.e("Firestore", "Error obteniendo el documento", task.getException());
+                            Toast.makeText(Login.this, "No se han podido obtener los datos de usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("Firestore", "Error en la operación Firestore", e);
+                        Toast.makeText(Login.this, "No se han podido obtener los datos de usuario", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Log.e("Auth", "No hay un usuario autenticado");
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void setDatosUsuario(){
+    private void setDatosUsuario() {
         Gson gson = new Gson();
         String userJson = gson.toJson(usuario);
         sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
@@ -196,8 +150,5 @@ public class Login extends AppCompatActivity {
         // Sign in success, update UI with the signed-in user's information
         Intent intent = new Intent(Login.this, MainActivity2.class);
         startActivity(intent);
-
     }
-
-
 }

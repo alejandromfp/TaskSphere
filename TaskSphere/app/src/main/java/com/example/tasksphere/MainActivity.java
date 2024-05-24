@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private final String API_KEY = "AAAAOwyZe_A:APA91bH2sWXmIU6uQJGwQ51bsu53CrZ1D7h7znkxf0jKFgYWBqzmwu5a0PoQmKcp9UxmWEjvSFBpVaf11hMp-y6auZvv3DB5Jb2tBkWQ7EgoUWok2bPUjV1A7tFtBnjkPXUq1HFPo8i-";
+    private final String API_KEY = "YOUR_API_KEY_HERE";
     EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
     TextView botonRegistro;
     private FirebaseFirestore db;
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registry);
 
         mAuth = FirebaseAuth.getInstance();
-
         db = FirebaseFirestore.getInstance();
 
         emailText = findViewById(R.id.cajaEmail);
@@ -58,12 +57,9 @@ public class MainActivity extends AppCompatActivity {
         telefonoText = findViewById(R.id.cajaTelefono);
         fechaNacimientoText = findViewById(R.id.cajaFechaNacimiento);
         dniText = findViewById(R.id.cajaDni);
-
-
         botonRegistro = findViewById(R.id.botonCrearCuenta);
-        botonRegistro.setOnClickListener(v -> {
-            //CREAR USUARIO EN FIREBASE
 
+<<<<<<< HEAD
             String email = emailText.getText().toString().trim();
             String password = passText.getText().toString().trim();
             String nombre = nombreText.getText().toString().trim();
@@ -73,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
             String telefono = telefonoText.getText().toString().trim();
             String fechaNacimiento = fechaNacimientoText.getText().toString().trim();
             String dni = dniText.getText().toString().trim();
+=======
+        botonRegistro.setOnClickListener(v -> {
+            // Crear usuario en Firebase
+            String email = emailText.getText().toString();
+            String password = passText.getText().toString();
+            String nombre = nombreText.getText().toString();
+            String apellidos = apellidosText.getText().toString();
+            String direccion = direccionText.getText().toString();
+            String ciudad = ciudadText.getText().toString();
+            String telefono = telefonoText.getText().toString();
+            String fechaNacimiento = fechaNacimientoText.getText().toString();
+            String dni = dniText.getText().toString();
+>>>>>>> alex
 
             // Validación de campos vacíos y formatos correctos
             if (nombre.isEmpty()) {
@@ -118,8 +127,9 @@ public class MainActivity extends AppCompatActivity {
                                     userData.put("fechaNacimiento", fechaNacimiento);
                                     userData.put("dni", dni);
                                     userData.put("rol", "Sin asignar");
+                                    userData.put("vacaciones", 30);
 
-                                    //ESTO ENVIA UNA NOTIFICACION A LOS ADMINISTRADORES DE QUE UN USUARIO SE REGISTRO
+                                    // Enviar notificación a los administradores
                                     obtenerTokensAdministradores(nombre);
 
                                     // Guardar estos datos en Firestore
@@ -129,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(MainActivity.this, Login.class);
                                                 startActivity(intent);
                                             })
-                                            .addOnFailureListener(e -> Toast.makeText(MainActivity.this, "Error al guardar datos adicionales", Toast.LENGTH_SHORT).show());
+                                            .addOnFailureListener(e -> {
+                                                Log.e("Firestore", "Error al guardar datos adicionales", e);
+                                                Toast.makeText(MainActivity.this, "Error al guardar datos adicionales", Toast.LENGTH_SHORT).show();
+                                            });
                                 }
                             } else {
                                 Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -137,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
-
     }
 
     private void enviarNotificacion(String token, String title, String body, String administratorId) {
@@ -185,10 +197,9 @@ public class MainActivity extends AppCompatActivity {
                             String token = document.getString("token");
                             String administratorId = document.getId();
                             if (token != null && !token.isEmpty()) {
-
                                 enviarNotificacion(token,
                                         "Nuevo usuario registrado",
-                                        "¡El usuario " + username+" se ha registrado en la aplicación, asignale un Rol cuanto antes!",
+                                        "¡El usuario " + username + " se ha registrado en la aplicación, asignale un Rol cuanto antes!",
                                         administratorId);
                             }
                         }
@@ -198,8 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void guardarNotificacionEnFirebase(String title, String body, String administratorId){
-
+    public void guardarNotificacionEnFirebase(String title, String body, String administratorId) {
         Map<String, Object> notificacion = new HashMap<>();
         notificacion.put("titulo", title);
         notificacion.put("descripcion", body);
@@ -216,6 +226,5 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(command -> {
                     Log.d("Firestore", "No se ha guardado con exito");
                 });
-
     }
 }
