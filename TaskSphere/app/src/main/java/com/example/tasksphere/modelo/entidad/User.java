@@ -2,6 +2,7 @@ package com.example.tasksphere.modelo.entidad;
 
 public class User {
     private String userId, nombre, apellidos, dni, fechaNac, direccion, localidad, biografia, rol, rolId, email, telefono ,profileImage, userToken;
+    private int vacaciones;
 
     public User() {
     }
@@ -17,8 +18,6 @@ public class User {
     public String getNombre() {
         return nombre;
     }
-
-
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -43,7 +42,6 @@ public class User {
     public String getFechaNac() {
         return fechaNac;
     }
-
 
     public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
@@ -119,5 +117,13 @@ public class User {
 
     public void setUserToken(String userToken) {
         this.userToken = userToken;
+    }
+
+    public int getVacaciones() {
+        return vacaciones;
+    }
+
+    public void setVacaciones(int vacaciones) {
+        this.vacaciones = vacaciones;
     }
 }

@@ -99,22 +99,24 @@
                         android:id="@+id/botonCambiarFecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="100dp"
+                        android:layout_marginTop="2dp"
                         android:backgroundTint="@color/azulOscuro"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Seleccionar Fecha"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/fecha" />
 
                     <TextView
                         android:id="@+id/fecha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="50dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="fecha"
-                        android:textColor="#9C27B0"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -124,112 +126,127 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="48dp"
-                        android:layout_marginTop="196dp"
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Hora de entrada"
-                        android:textColor="#673AB7"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/botonCambiarFecha" />
 
                     <TextView
                         android:id="@+id/horaEntrada"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="196dp"
+                        android:layout_marginTop="25dp"
                         android:layout_marginEnd="72dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="TextView"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/botonCambiarFecha" />
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="48dp"
-                        android:layout_marginTop="360dp"
+                        android:layout_marginTop="15dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Total de horas"
-                        android:textColor="#673AB7"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="48dp"
-                        android:layout_marginTop="272dp"
+                        android:layout_marginTop="15dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Hora de salida"
-                        android:textColor="#673AB7"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
                     <TextView
                         android:id="@+id/totalHoras"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="360dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginEnd="72dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="TextView"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/horaSalida" />
 
                     <TextView
                         android:id="@+id/horaSalida"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="272dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginEnd="72dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="TextView"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/horaEntrada" />
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="48dp"
-                        android:layout_marginTop="472dp"
+                        android:layout_marginTop="50dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Vacaciones disponibles"
-                        android:textColor="#673AB7"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/botonVacaciones"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="524dp"
-                        android:backgroundTint="@color/azulOscuro"
-                        android:text="Solicitar dia de vacaciones"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                     <TextView
                         android:id="@+id/diasVacaciones"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="472dp"
+                        android:layout_marginTop="50dp"
                         android:layout_marginEnd="72dp"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="TextView"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/totalHoras" />
+
+                    <Button
+                        android:id="@+id/botonVacaciones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/azulOscuro"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Solicitar dia de vacaciones"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.496"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+                    <Button
+                        android:id="@+id/botonGestionVacaciones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="100dp"
+                        android:backgroundTint="@color/azulOscuro"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Gestionar vacaciones"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/diasVacaciones" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
