@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         fechaNacimientoText = findViewById(R.id.cajaFechaNacimiento);
         dniText = findViewById(R.id.cajaDni);
         botonRegistro = findViewById(R.id.botonCrearCuenta);
-
-<<<<<<< HEAD
+        botonRegistro.setOnClickListener(v -> {
+            // Crear usuario en Firebase
             String email = emailText.getText().toString().trim();
             String password = passText.getText().toString().trim();
             String nombre = nombreText.getText().toString().trim();
@@ -69,19 +69,6 @@ public class MainActivity extends AppCompatActivity {
             String telefono = telefonoText.getText().toString().trim();
             String fechaNacimiento = fechaNacimientoText.getText().toString().trim();
             String dni = dniText.getText().toString().trim();
-=======
-        botonRegistro.setOnClickListener(v -> {
-            // Crear usuario en Firebase
-            String email = emailText.getText().toString();
-            String password = passText.getText().toString();
-            String nombre = nombreText.getText().toString();
-            String apellidos = apellidosText.getText().toString();
-            String direccion = direccionText.getText().toString();
-            String ciudad = ciudadText.getText().toString();
-            String telefono = telefonoText.getText().toString();
-            String fechaNacimiento = fechaNacimientoText.getText().toString();
-            String dni = dniText.getText().toString();
->>>>>>> alex
 
             // Validación de campos vacíos y formatos correctos
             if (nombre.isEmpty()) {

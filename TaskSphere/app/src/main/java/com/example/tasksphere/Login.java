@@ -150,5 +150,6 @@ public class Login extends AppCompatActivity {
         // Sign in success, update UI with the signed-in user's information
         Intent intent = new Intent(Login.this, MainActivity2.class);
         startActivity(intent);
+        finish();
     }
 }
