@@ -11,7 +11,6 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -32,17 +31,12 @@ public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailText, passText;
-
     private CheckBox checkBoxShowPassword;
     String token;
-
     Button botonLogin;
     TextView botonRegistro;
-
     SharedPreferences sharedPreferences;
-
     User usuario;
-
     FirebaseFirestore db;
 
     @Override
@@ -61,10 +55,11 @@ public class Login extends AppCompatActivity {
 
         emailText = findViewById(R.id.cajaCorreo);
         passText = findViewById(R.id.cajaPass);
+        passText.setTransformationMethod(PasswordTransformationMethod.getInstance()); // Ocultar la contraseña por defecto
 
         botonLogin = findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(v -> {
-            //LOGIN EN FIREBASE
+            // LOGIN EN FIREBASE
             String email = emailText.getText().toString();
             String password = passText.getText().toString();
 
@@ -93,9 +88,7 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
         });
 
-        passText = findViewById(R.id.cajaPass);
         checkBoxShowPassword = findViewById(R.id.checkBoxLogin);
-
         checkBoxShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 // Mostrar la contraseña
@@ -105,7 +98,6 @@ public class Login extends AppCompatActivity {
                 passText.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
-
     }
 
     private void obtainUserFromDatabase() {
