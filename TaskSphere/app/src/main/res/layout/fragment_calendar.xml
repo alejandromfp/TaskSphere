@@ -123,79 +123,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/textoVacaciones"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="48dp"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginTop="50dp"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="Hora de entrada"
-                        android:textColor="#000000"
                         android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/botonCambiarFecha" />
-
-                    <TextView
-                        android:id="@+id/horaEntrada"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginEnd="72dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="TextView"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/botonCambiarFecha" />
-
-                    <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="48dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Total de horas"
-                        android:textColor="#000000"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="48dp"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Hora de salida"
-                        android:textColor="#000000"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                    <TextView
-                        android:id="@+id/totalHoras"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="72dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="TextView"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/horaSalida" />
-
-                    <TextView
-                        android:id="@+id/horaSalida"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="72dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="TextView"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/horaEntrada" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -208,7 +144,7 @@
                         android:textColor="#000000"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                        app:layout_constraintTop_toBottomOf="@+id/textoVacaciones" />
 
                     <TextView
                         android:id="@+id/diasVacaciones"
@@ -220,13 +156,13 @@
                         android:text="TextView"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/totalHoras" />
+                        app:layout_constraintTop_toBottomOf="@+id/textoVacaciones" />
 
                     <Button
                         android:id="@+id/botonVacaciones"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="20dp"
                         android:backgroundTint="@color/azulOscuro"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Solicitar dia de vacaciones"
