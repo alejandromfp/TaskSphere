@@ -25,11 +25,12 @@ import com.bumptech.glide.Glide;
 import com.example.tasksphere.modelo.entidad.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,10 +39,12 @@ import java.util.Map;
 
 public class CalendarFragment extends Fragment {
 
-    TextView fecha, diasVacaciones;
+    TextView fecha, diasVacaciones, estadoVacaciones;
     Button seleccionarFecha, botonVacaciones, botonGestionVacaciones;
 
     private Calendar fechaSeleccionada = Calendar.getInstance();
+    private String fechaSeleccionadaString;  // Variable para almacenar la fecha en formato DD/MM/AAAA
+    private boolean tieneVacaciones; // Variable para almacenar el resultado de la consulta
 
     FirebaseAuth mAuth;
 
@@ -52,7 +55,6 @@ public class CalendarFragment extends Fragment {
     ImageView profileImg;
 
     TextView username, userRole;
-    TextView horaEntrada, horaSalida, totalHoras;
 
     public CalendarFragment() {
     }
@@ -100,7 +102,10 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 fechaSeleccionada.set(year, month, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                fechaSeleccionadaString = sdf.format(fechaSeleccionada.getTime());  // Guardar la fecha en la variable
                 actualizarFechaTexto(fechaSeleccionada.getTime());
+                verificarVacacionesAprobadas();  // Verificar las vacaciones aprobadas cada vez que se selecciona una fecha
             }
         }, anio, mes, dia);
 
@@ -148,8 +153,13 @@ public class CalendarFragment extends Fragment {
             return;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaVacaciones = sdf.format(fechaSeleccionada.getTime());
+        // Si fechaSeleccionadaString está en blanco, utilizar la fecha actual
+        if (fechaSeleccionadaString == null || fechaSeleccionadaString.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaSeleccionadaString = LocalDate.now().format(formatter);
+        }
+
+        String fechaVacaciones = fechaSeleccionadaString;  // Utilizar la fecha guardada en formato DD/MM/AAAA
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -158,17 +168,34 @@ public class CalendarFragment extends Fragment {
                 .whereEqualTo("fecha", fechaVacaciones)
                 .whereEqualTo("estado", "pendiente")
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        Toast.makeText(requireContext(), "Ya existe una solicitud para esta fecha.", Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(taskPendiente -> {
+                    if (taskPendiente.isSuccessful() && !taskPendiente.getResult().isEmpty()) {
+                        Toast.makeText(requireContext(), "Ya existe una solicitud pendiente para esta fecha.", Toast.LENGTH_SHORT).show();
                     } else {
-                        enviarNuevaSolicitud(db, user.getUid(), fechaVacaciones);
+                        // Si no hay solicitudes pendientes, revisamos las aprobadas
+                        db.collection("solicitudes")
+                                .whereEqualTo("usuario", user.getUid())
+                                .whereEqualTo("fecha", fechaVacaciones)
+                                .whereEqualTo("estado", "aprobada")
+                                .get()
+                                .addOnCompleteListener(taskAprobada -> {
+                                    if (taskAprobada.isSuccessful() && !taskAprobada.getResult().isEmpty()) {
+                                        Toast.makeText(requireContext(), "Ya existe una solicitud aprobada para esta fecha.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // Si no hay solicitudes pendientes ni aprobadas, se puede enviar una nueva solicitud
+                                        enviarNuevaSolicitud(db, user.getUid(), fechaVacaciones);
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(requireContext(), "Error al verificar solicitudes existentes", Toast.LENGTH_SHORT).show();
+                                });
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(), "Error al verificar solicitudes existentes", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private void enviarNuevaSolicitud(FirebaseFirestore db, String userId, String fechaVacaciones) {
         Map<String, Object> userData = new HashMap<>();
@@ -186,6 +213,47 @@ public class CalendarFragment extends Fragment {
                     Toast.makeText(requireContext(), "Error al enviar la solicitud", Toast.LENGTH_LONG).show();
                     Log.w("Firestore", "Error añadiendo documento", e);
                 });
+    }
+
+    // Método para verificar si el usuario tiene vacaciones aprobadas en la fecha seleccionada
+    private void verificarVacacionesAprobadas() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            tieneVacaciones = false;
+            actualizarEstadoVacaciones();  // Actualizar el estado de vacaciones en el TextView
+            return;
+        }
+
+        String userId = user.getUid();
+
+        db.collection("solicitudes")
+                .whereEqualTo("usuario", userId)
+                .whereEqualTo("fecha", fechaSeleccionadaString)
+                .whereEqualTo("estado", "aprobada")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        tieneVacaciones = true;
+                    } else {
+                        tieneVacaciones = false;
+                    }
+                    actualizarEstadoVacaciones();  // Actualizar el estado de vacaciones en el TextView
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), "Error al verificar las vacaciones aprobadas", Toast.LENGTH_SHORT).show();
+                    tieneVacaciones = false;
+                    actualizarEstadoVacaciones();  // Actualizar el estado de vacaciones en el TextView
+                });
+    }
+
+    // Método para actualizar el estado de vacaciones en el TextView
+    private void actualizarEstadoVacaciones() {
+        if (tieneVacaciones) {
+            estadoVacaciones.setText("Tienes vacaciones");
+        } else {
+            estadoVacaciones.setText("");
+        }
     }
 
     private void obtenerDatosDeUsuario() {
@@ -207,7 +275,6 @@ public class CalendarFragment extends Fragment {
         userRole.setText(usuario.getRol());
 
         verificarRolUsuario();
-
     }
 
     private void verificarRolUsuario() {
@@ -293,5 +360,6 @@ public class CalendarFragment extends Fragment {
         botonGestionVacaciones.setEnabled(false);
 
         diasVacaciones = rootView.findViewById(R.id.diasVacaciones);
+        estadoVacaciones = rootView.findViewById(R.id.textoVacaciones);
     }
 }

@@ -207,6 +207,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layoutContraseña" />
 
+            <CheckBox
+                android:id="@+id/checkBoxRegistry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/layoutContraseña"
+                app:layout_constraintEnd_toEndOf="@+id/layoutContraseña"
+                app:layout_constraintTop_toTopOf="@+id/layoutContraseña" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
