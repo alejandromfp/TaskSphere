@@ -29,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -151,6 +153,12 @@ public class CalendarFragment extends Fragment {
             return;
         }
 
+        // Si fechaSeleccionadaString está en blanco, utilizar la fecha actual
+        if (fechaSeleccionadaString == null || fechaSeleccionadaString.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            fechaSeleccionadaString = LocalDate.now().format(formatter);
+        }
+
         String fechaVacaciones = fechaSeleccionadaString;  // Utilizar la fecha guardada en formato DD/MM/AAAA
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -186,8 +194,8 @@ public class CalendarFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(), "Error al verificar solicitudes existentes", Toast.LENGTH_SHORT).show();
                 });
-
     }
+
 
     private void enviarNuevaSolicitud(FirebaseFirestore db, String userId, String fechaVacaciones) {
         Map<String, Object> userData = new HashMap<>();
@@ -244,7 +252,7 @@ public class CalendarFragment extends Fragment {
         if (tieneVacaciones) {
             estadoVacaciones.setText("Tienes vacaciones");
         } else {
-            estadoVacaciones.setText("No tienes vacaciones");
+            estadoVacaciones.setText("");
         }
     }
 
