@@ -122,6 +122,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+
                         <CalendarView
                             android:id="@+id/calendar"
                             android:layout_width="wrap_content"
@@ -130,18 +131,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/selectday" />
 
-
-                        <TextView
-                            android:id="@+id/lista_fichajes_tag"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="18dp"
-                            android:fontFamily="@font/poppins_medium"
-                            android:text="Fichajes:"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/spinner" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -160,19 +149,35 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
+
+                    <TextView
+                        android:id="@+id/textoVacaciones"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="148dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.51"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
                     <TextView
                         android:id="@+id/diasVacaciones"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+
                         android:layout_marginEnd="16dp"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="TextView"
+                        android:text="0"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
+
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/textView5"
                         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
 
                     <Button
                         android:id="@+id/botonVacaciones"
@@ -190,8 +195,7 @@
                     <Button
                         android:id="@+id/botonGestionVacaciones"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_height="48dp"
                         android:backgroundTint="@color/azulOscuro"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Gestionar vacaciones"
@@ -199,7 +203,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.513"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/botonVacaciones" />
+                        tools:layout_editor_absoluteY="556dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

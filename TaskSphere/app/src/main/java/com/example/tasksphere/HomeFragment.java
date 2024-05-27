@@ -518,19 +518,7 @@ public class HomeFragment extends Fragment {
         return fecha;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (contador != null) {
-            contador.cancel();
-        }
-    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        detenerContador();
-    }
 
 
 

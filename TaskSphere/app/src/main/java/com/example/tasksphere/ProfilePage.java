@@ -339,8 +339,8 @@ public class ProfilePage extends AppCompatActivity {
                                                     //NOTIFICAMOS AL USUARIO
                                                     enviarNotificacion(
                                                             usuario.getUserToken(),
-                                                            "Equipo",
-                                                            "El administrador te ha asignado el Rol de "+ usuario.getRol(),
+                                                            "Nuevo Rol",
+                                                            "Un administrador te ha asignado el Rol de "+ usuario.getRol(),
                                                             usuario.getUserId()
                                                     );
                                                     Log.d("ROLCHANGE", "Se ha cambiado el rol");
@@ -404,7 +404,7 @@ public class ProfilePage extends AppCompatActivity {
         notificacion.put("titulo", title);
         notificacion.put("descripcion", body);
         notificacion.put("fechaCreacion", Timestamp.now());
-        notificacion.put("categoria", "Tareas");
+        notificacion.put("categoria", "Equipo");
 
         db.collection("users")
                 .document(administratorId)

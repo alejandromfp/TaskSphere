@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,16 +30,13 @@ import com.google.gson.Gson;
 public class Login extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    EditText emailText, passText;
+    private EditText emailText, passText;
+    private CheckBox checkBoxShowPassword;
     String token;
-
     Button botonLogin;
     TextView botonRegistro;
-
     SharedPreferences sharedPreferences;
-
     User usuario;
-
     FirebaseFirestore db;
 
     @Override
@@ -56,10 +55,11 @@ public class Login extends AppCompatActivity {
 
         emailText = findViewById(R.id.cajaCorreo);
         passText = findViewById(R.id.cajaPass);
+        passText.setTransformationMethod(PasswordTransformationMethod.getInstance()); // Ocultar la contraseña por defecto
 
         botonLogin = findViewById(R.id.botonLogin);
         botonLogin.setOnClickListener(v -> {
-            //LOGIN EN FIREBASE
+            // LOGIN EN FIREBASE
             String email = emailText.getText().toString();
             String password = passText.getText().toString();
 
@@ -86,6 +86,17 @@ public class Login extends AppCompatActivity {
         botonRegistro.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
+        });
+
+        checkBoxShowPassword = findViewById(R.id.checkBoxLogin);
+        checkBoxShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Mostrar la contraseña
+                passText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                // Ocultar la contraseña
+                passText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            }
         });
     }
 
