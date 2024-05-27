@@ -277,9 +277,7 @@ public class HomeFragment extends Fragment {
 
         fichajesRef.get()
                 .addOnSuccessListener(querySnapshot ->{
-                    Log.d("HOLA123", "eyyy");
                         if(!querySnapshot.isEmpty()){
-                            Log.d("HOLA123", "Oyyy");
                             AtomicInteger completedQueries = new AtomicInteger(0);
                             for (QueryDocumentSnapshot doc: querySnapshot){
                                 fichajesRef.document(doc.getId())
@@ -305,7 +303,8 @@ public class HomeFragment extends Fragment {
                                                 if (completedQueries.incrementAndGet() == querySnapshot.size()) {
                                                     // Todas las consultas han terminado
                                                     if (activos == 0) {
-                                                        Log.d("121212", "NO ME LO PUEDO CREER HAY 0 ACTIVOS");
+
+
                                                         fichar.setVisibility(View.VISIBLE);
                                                         ficharTag.setVisibility(View.VISIBLE);
                                                         buttonPlay.setVisibility(View.VISIBLE);
@@ -325,6 +324,7 @@ public class HomeFragment extends Fragment {
                                                         timer.setVisibility(View.VISIBLE);
                                                         buttonPause.setOnClickListener(v -> {
                                                             terminarFichaje();
+                                                            setFicharItem();
 
                                                         });
 
