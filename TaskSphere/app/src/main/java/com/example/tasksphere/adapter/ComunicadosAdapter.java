@@ -1,6 +1,7 @@
 package com.example.tasksphere.adapter;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -121,15 +123,45 @@ public class ComunicadosAdapter extends RecyclerView.Adapter<ComunicadosAdapter.
     }
 
     private void borrarComunicado(Comunicado comunicado) {
-        db.collection("Comunicados").document(comunicado.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    comunicadosList.remove(comunicado);
-                    notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Error al eliminar el comunicado", Toast.LENGTH_SHORT).show();
-                });
+        // Crear un cuadro de diálogo de confirmación
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Confirmación");
+        builder.setMessage("¿Estás seguro de que deseas eliminar este comunicado?");
+
+        // Agregar botón de confirmación
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Si el usuario confirma la eliminación, proceder con la eliminación del comunicado
+                db.collection("Comunicados").document(comunicado.getId())
+                        .delete()
+                        .addOnSuccessListener(aVoid -> {
+                            // Eliminar el comunicado de la lista
+                            comunicadosList.remove(comunicado);
+                            // Notificar al adaptador del cambio en los datos
+                            notifyDataSetChanged();
+                            // Mostrar un mensaje de éxito
+                            Toast.makeText(context, "Comunicado eliminado correctamente", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Mostrar un mensaje de error en caso de fallo
+                            Toast.makeText(context, "Error al eliminar el comunicado", Toast.LENGTH_SHORT).show();
+                        });
+            }
+        });
+
+        // Agregar botón de cancelar
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Si el usuario cancela, simplemente cerrar el cuadro de diálogo sin hacer nada
+                dialog.dismiss();
+            }
+        });
+
+        // Mostrar el cuadro de diálogo
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
