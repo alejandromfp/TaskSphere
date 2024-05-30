@@ -4,6 +4,6 @@
     <!-- Estilo para el BottomNavigationView -->
     <style name="BottomNavigationStyle">
         <!-- Personaliza los atributos según tus preferencias -->
-        <item name="android:background">#004A7E</item>
+        <item name="android:background">@color/azulOscuro</item>
     </style>
 </resources>

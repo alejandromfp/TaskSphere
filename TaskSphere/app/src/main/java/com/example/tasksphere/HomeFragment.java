@@ -261,7 +261,6 @@ public class HomeFragment extends Fragment {
                     }else
                         notificationCount.setVisibility(View.GONE);
                 });
-
     }
 
 
@@ -511,6 +510,7 @@ public class HomeFragment extends Fragment {
                 });
 
     }
+
     private String obtenerFechaEnString(Date date){
         String fecha = null;
         SimpleDateFormat formatter = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
