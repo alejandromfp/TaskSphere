@@ -1,6 +1,7 @@
 package com.example.tasksphere;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ApprovalsActivity extends AppCompatActivity {
 
+    Button backButton;
     RecyclerView mRecycler;
     SolicitudAdapter mAdapter;
     FirebaseFirestore db;
@@ -25,14 +27,9 @@ public class ApprovalsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_approvals);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        backButton = findViewById(R.id.backbutton);
+        backButton.setOnClickListener(v -> onBackPressed());
         db = FirebaseFirestore.getInstance();
         mRecycler = findViewById(R.id.listadoApprovalsPendientes);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));

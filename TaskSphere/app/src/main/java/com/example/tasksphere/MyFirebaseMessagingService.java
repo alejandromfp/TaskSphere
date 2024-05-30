@@ -40,7 +40,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Obtener el servicio de notificación
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
 
-        // Crear el canal de notificación (solo necesario en Android 8.0 y superior)
         createNotificationChannel();
 
         // Intent para abrir la actividad principal al hacer clic en la notificación
@@ -60,9 +59,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Construir la notificación
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // Icono de notificación
-                .setContentTitle(title) // Título de la notificación
-                .setContentText(body) // Contenido de la notificación
+                .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                .setContentTitle(title)
+                .setContentText(body)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 

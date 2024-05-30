@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +48,10 @@ public class CalendarFragment extends Fragment {
     private boolean tieneVacaciones; // Variable para almacenar el resultado de la consulta
 
     FirebaseAuth mAuth;
+    Calendar calendar;
+
+
+    CalendarView calendarView;
 
     SharedPreferences sharedPreferences;
     User usuario;
@@ -84,6 +89,7 @@ public class CalendarFragment extends Fragment {
         getItems(rootView);
         obtenerDatosDeUsuario();
         setDatosDeUsuario();
+        configurarCalendario();
         obtenerVacaciones();
 
         actualizarFechaTexto(fechaSeleccionada.getTime());
@@ -91,27 +97,21 @@ public class CalendarFragment extends Fragment {
         return rootView;
     }
 
-    public void abrirCalendario(View view) {
+    public void configurarCalendario() {
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.MONDAY);
-        int anio = cal.get(Calendar.YEAR);
-        int mes = cal.get(Calendar.MONTH);
-        int dia = cal.get(Calendar.DAY_OF_MONTH);
+        long today = calendar.getTimeInMillis();
+        calendarView.setDate(today, true, true);
 
-        DatePickerDialog dpd = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                fechaSeleccionada.set(year, month, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                fechaSeleccionadaString = sdf.format(fechaSeleccionada.getTime());  // Guardar la fecha en la variable
-                actualizarFechaTexto(fechaSeleccionada.getTime());
-                verificarVacacionesAprobadas();  // Verificar las vacaciones aprobadas cada vez que se selecciona una fecha
-            }
-        }, anio, mes, dia);
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            calendar.set(year,month,dayOfMonth);
+            fechaSeleccionada.set(year, month, dayOfMonth);
+            actualizarFechaTexto(fechaSeleccionada.getTime());
+            verificarVacacionesAprobadas();
 
-        dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
-        dpd.show();
+        });
     }
+
 
     private void actualizarFechaTexto(Date date) {
         Calendar hoy = Calendar.getInstance();
@@ -337,12 +337,11 @@ public class CalendarFragment extends Fragment {
     }
 
     public void getItems(View rootView) {
-        fecha = rootView.findViewById(R.id.fecha);
+        fecha = rootView.findViewById(R.id.selectday);
         botonVacaciones = rootView.findViewById(R.id.botonVacaciones);
         botonVacaciones.setOnClickListener(v -> enviarSolicitudVacaciones());
-        seleccionarFecha = rootView.findViewById(R.id.botonCambiarFecha);
-        seleccionarFecha.setOnClickListener(v -> abrirCalendario(seleccionarFecha));
-
+        calendarView = rootView.findViewById(R.id.calendar);
+        calendar = Calendar.getInstance();
         username = rootView.findViewById(R.id.username);
         userRole = rootView.findViewById(R.id.userRole);
         profileImg = rootView.findViewById(R.id.profileImg);
@@ -358,7 +357,6 @@ public class CalendarFragment extends Fragment {
         // Inicialmente, ocultar el botón de gestión de vacaciones
         botonGestionVacaciones.setVisibility(View.GONE);
         botonGestionVacaciones.setEnabled(false);
-
         diasVacaciones = rootView.findViewById(R.id.diasVacaciones);
         estadoVacaciones = rootView.findViewById(R.id.textoVacaciones);
     }

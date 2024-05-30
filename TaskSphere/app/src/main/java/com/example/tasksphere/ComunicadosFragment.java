@@ -188,7 +188,7 @@ public class ComunicadosFragment extends Fragment {
         comunicado.put("fecha_creacion", Timestamp.now());
         comunicado.put("id_usuario", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        // Agregar el comunicado a la colecciÃ³n "comunicados"
+
         comunicadosRef.add(comunicado)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

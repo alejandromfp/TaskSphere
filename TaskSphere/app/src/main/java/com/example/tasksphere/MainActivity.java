@@ -37,9 +37,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private final String API_KEY = "YOUR_API_KEY_HERE";
-    private EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
-    private TextView botonRegistro;
+
+    final String API_KEY = "AAAAOwyZe_A:APA91bH2sWXmIU6uQJGwQ51bsu53CrZ1D7h7znkxf0jKFgYWBqzmwu5a0PoQmKcp9UxmWEjvSFBpVaf11hMp-y6auZvv3DB5Jb2tBkWQ7EgoUWok2bPUjV1A7tFtBnjkPXUq1HFPo8i-";
+    EditText emailText, passText, nombreText, apellidosText, direccionText, ciudadText, telefonoText, fechaNacimientoText, dniText;
+    TextView botonRegistro;
     private CheckBox checkBoxShowPassword;
     private FirebaseFirestore db;
 
@@ -120,13 +121,13 @@ public class MainActivity extends AppCompatActivity {
                                     userData.put("dni", dni);
                                     userData.put("rol", "Sin asignar");
                                     userData.put("vacaciones", 30);
-
-                                    // Enviar notificación a los administradores
                                     obtenerTokensAdministradores(nombre);
+
 
                                     // Guardar estos datos en Firestore
                                     db.collection("users").document(user.getUid()).set(userData)
                                             .addOnSuccessListener(aVoid -> {
+
                                                 Toast.makeText(MainActivity.this, "Usuario registrado con datos adicionales", Toast.LENGTH_LONG).show();
                                                 Intent intent = new Intent(MainActivity.this, Login.class);
                                                 startActivity(intent);

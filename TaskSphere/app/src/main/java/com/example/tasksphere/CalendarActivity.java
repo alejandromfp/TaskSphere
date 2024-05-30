@@ -55,9 +55,9 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         fecha = findViewById(R.id.fecha);
-        vacacionesTextView = findViewById(R.id.diasVacaciones); // Inicializar vacacionesTextView
+        vacacionesTextView = findViewById(R.id.diasVacaciones);
 
-        actualizarFechaTexto(new Date()); // Actualizar la fecha al iniciar
+        actualizarFechaTexto(new Date());
 
         Button botonVacaciones = findViewById(R.id.botonVacaciones);
         botonVacaciones.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +137,7 @@ public class CalendarActivity extends AppCompatActivity {
                 actualizarFechaTexto(fechaSeleccionada.getTime());
             }
         }, anio, mes, dia);
-        dpd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE)); //Añade background blanco al calendar
+        dpd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
         dpd.show();
     }
