@@ -104,6 +104,8 @@ public class CalendarFragment extends Fragment {
         calendarView.setDate(today, true, true);
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            fechaSeleccionadaString = sdf.format(fechaSeleccionada.getTime());
             calendar.set(year,month,dayOfMonth);
             fechaSeleccionada.set(year, month, dayOfMonth);
             actualizarFechaTexto(fechaSeleccionada.getTime());
