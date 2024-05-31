@@ -1,6 +1,6 @@
 # TaskSphere
 
-![Logo](TaskSphere\app\src\main\res\drawable\iconapp_1.png)
+![Logo](TaskSphere/app/src/main/res/drawable/iconapp_1.png)
 
 ## Descripción del Proyecto
 
