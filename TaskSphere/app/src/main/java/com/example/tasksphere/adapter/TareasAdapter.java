@@ -49,7 +49,7 @@ public class TareasAdapter extends RecyclerView.Adapter<TareasAdapter.TareaViewH
         Task tarea = tasksList.get(position);
         holder.nombreTextView.setText(tarea.getTaskName());
 
-        if(usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")){
+        if((usuario.getRol().equals("Administrador") || usuario.getRol().equals("Gerente")) && tarea.getAsignadaA() !=null){
             holder.cardView.setVisibility(View.VISIBLE);
             db.collection("users")
                     .document(tarea.getAsignadaA())

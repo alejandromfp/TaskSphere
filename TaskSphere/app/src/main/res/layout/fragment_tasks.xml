@@ -138,14 +138,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <SearchView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:layout_margin="8dp"
-                                android:background="@drawable/search_view_bg"
-                                app:queryHint="Search here..." />
-
                             <com.google.android.material.button.MaterialButtonToggleGroup
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
